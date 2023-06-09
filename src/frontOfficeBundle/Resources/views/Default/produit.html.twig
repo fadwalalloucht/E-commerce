@@ -1,0 +1,257 @@
+{% extends "@frontOffice/base1.html.twig" %}
+{% block title %}
+    PRODUIT
+{% endblock title %}
+{% block body %}
+    <div class="hero-wrap hero-bread" style="background-image: url({{ asset('Bundle/assets/images/35.jpg') }});">
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-9 ftco-animate text-center">
+                    <h1 class="mb-0 bread">Nos produits</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center mb-3 pb-3">
+            <div class="col-md-12 heading-section text-center ftco-animate">
+                <h2 class="mb-4">{{ nameC }}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8"></div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <div class="form-field">
+                        <i class="icon icon-arrow-down3"></i>
+                        <select name="slct" onchange="tri()" onclick="return false;" id="tri" class="form-control">
+                            <option value="" {% if tri == "" %}selected{% endif %}>tris</option>
+                            <option value="dateDESC" {% if tri == "dateDESC" %}selected{% endif %}>Du plus récent au plus ancien</option>
+                            <option value="dateASC" {% if tri == "dateASC" %}selected{% endif %}>Du plus ancien au plus récent</option>
+                            <option value="prixDESC" {% if tri == "prixDESC" %}selected{% endif %}>Du plus cher au moins cher</option>
+                            <option value="prixASC" {% if tri == "prixASC" %}selected{% endif %}>Du moins cher au plus cher</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="ftco-section bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-lg-10 order-md-last">
+                    <div class="row">
+                        {% for a in article %}
+                            <div class="col-sm-12 col-md-6 col-lg-4 ftco-animate d-flex">
+                                <div class="product d-flex flex-column">
+                                    <a href="/produit_detail/{{ a['obj'].titre|replace({"/":"-"," ":"-" }) }}/{{ a['obj'].id }}" class="img-prod"><img class="img-fluid" src="{{ asset(a['img']) }}">
+                                        <div class="overlay"></div>
+                                    </a>
+                                    <div class="text py-3 pb-4 px-3">
+                                        <div class="d-flex">
+                                            <div class="cat">
+                                                <span>Catégorie</span>
+                                            </div>
+                                            <div class="rating">
+                                                <p class="text-right mb-0">
+                                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <h3><a href="#">{{ a["obj"].titre|slice(0,30) }}</a></h3>
+                                        <div class="pricing">
+                                            <p class="price">
+                                                {% if a["obj"].prix > a["prix"] %}
+                                                    <span style="color:red;">{{ a["prix"] }} MAD </span>
+                                                    <del style="font-size: 10px;">
+                                                        {{ a["obj"].prix }} MAD
+                                                    </del>
+                                                {% else %}
+                                                    {{ a["prix"] }} MAD
+                                                {% endif %}
+                                            </p>
+                                        </div>
+                                        <p class="bottom-area d-flex px-3">
+                                            <a href="/produit_detail/{{ a['obj'].titre|replace({"/":"-"," ":"-" }) }}/{{ a['obj'].id }}" class="add-to-cart text-center py-2 mr-1">Voir le produit<span><i class="ion-ios-cart ml-1"></i></span></a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <div class="sidebar">
+                        <div class="sidebar-box-2">
+                            <h2 class="heading">Catégories</h2>
+                            <div class="fancy-collapse-panel">
+                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                    {% for c in catAff %}
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" role="tab" id="headingOne{{ loop.index }}">
+                                                <h4 class="panel-title">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne{{ loop.index }}" aria-expanded="true" aria-controls="collapseOne{{ loop.index }}">
+                                                        {{ c["cat"].nom }}
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapseOne{{ loop.index }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne{{ loop.index }}">
+                                                <div class="panel-body">
+                                                    <ul>
+                                                        {% for sc in c["sousCat"] %}
+                                                            <li><a href="/produit/{{ c["cat"].nom|replace({"/":"-"," ":"-" }) }}/{{ c["cat"].id }}/{{ sc.id }}/">{{ sc.nom }}</a></li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock body %}
+{% block js %}
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+            $('.tendance-search-menu').click(function(){
+                $('.tendance-search').toggle();
+
+            });
+
+        });
+
+
+        function tri(){
+
+            var tri = $( "#tri" ).val();
+            var loc=  location.href.split("?")[0];
+
+
+            window.location.href = loc+'?tri='+tri;
+
+        }
+
+        window.onload = function(){
+            crear_select();
+        };
+
+        function isMobileDevice() {
+            return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+        };
+
+
+        var li = new Array();
+        function crear_select(){
+            var div_cont_select = document.querySelectorAll("[data-mate-select='active']");
+            var select_ = '';
+            for (var e = 0; e < div_cont_select.length; e++) {
+                div_cont_select[e].setAttribute('data-indx-select',e);
+                div_cont_select[e].setAttribute('data-selec-open','false');
+                var ul_cont = document.querySelectorAll("[data-indx-select='"+e+"'] > .cont_list_select_mate > ul");
+                select_ = document.querySelectorAll("[data-indx-select='"+e+"'] >select")[0];
+                if (isMobileDevice()) {
+                    select_.addEventListener('change', function () {
+                        _select_option(select_.selectedIndex,e);
+                    });
+                }
+                var select_optiones = select_.options;
+                document.querySelectorAll("[data-indx-select='"+e+"']  > .selecionado_opcion ")[0].setAttribute('data-n-select',e);
+                document.querySelectorAll("[data-indx-select='"+e+"']  > .icon_select_mate ")[0].setAttribute('data-n-select',e);
+                for (var i = 0; i < select_optiones.length; i++) {
+                    li[i] = document.createElement('li');
+                    if (select_optiones[i].selected == true || select_.value == select_optiones[i].innerHTML ) {
+                        li[i].className = 'active';
+                        document.querySelector("[data-indx-select='"+e+"']  > .selecionado_opcion ").innerHTML = select_optiones[i].innerHTML;
+                    };
+                    li[i].setAttribute('data-index',i);
+                    li[i].setAttribute('data-selec-index',e);
+                    // funcion click al selecionar
+                    li[i].addEventListener( 'click', function(){  _select_option(this.getAttribute('data-index'),this.getAttribute('data-selec-index')); });
+
+                    li[i].innerHTML = select_optiones[i].innerHTML;
+                    ul_cont[0].appendChild(li[i]);
+
+                }; // Fin For select_optiones
+            }; // fin for divs_cont_select
+        } // Fin Function
+
+
+
+        var cont_slc = 0;
+        function open_select(idx){
+            var idx1 =  idx.getAttribute('data-n-select');
+            var ul_cont_li = document.querySelectorAll("[data-indx-select='"+idx1+"'] .cont_select_int > li");
+            var hg = 0;
+            var slect_open = document.querySelectorAll("[data-indx-select='"+idx1+"']")[0].getAttribute('data-selec-open');
+            var slect_element_open = document.querySelectorAll("[data-indx-select='"+idx1+"'] select")[0];
+            if (isMobileDevice()) {
+                if (window.document.createEvent) { // All
+                    var evt = window.document.createEvent("MouseEvents");
+                    evt.initMouseEvent("mousedown", false, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+                    slect_element_open.dispatchEvent(evt);
+                } else if (slect_element_open.fireEvent) { // IE
+                    slect_element_open.fireEvent("onmousedown");
+                }else {
+                    slect_element_open.click();
+                }
+            }else {
+
+
+                for (var i = 0; i < ul_cont_li.length; i++) {
+                    hg += ul_cont_li[i].offsetHeight;
+                };
+                if (slect_open == 'false') {
+                    document.querySelectorAll("[data-indx-select='"+idx1+"']")[0].setAttribute('data-selec-open','true');
+                    document.querySelectorAll("[data-indx-select='"+idx1+"'] > .cont_list_select_mate > ul")[0].style.height = hg+"px";
+                    document.querySelectorAll("[data-indx-select='"+idx1+"'] > .icon_select_mate")[0].style.transform = 'rotate(180deg)';
+                }else{
+                    document.querySelectorAll("[data-indx-select='"+idx1+"']")[0].setAttribute('data-selec-open','false');
+                    document.querySelectorAll("[data-indx-select='"+idx1+"'] > .icon_select_mate")[0].style.transform = 'rotate(0deg)';
+                    document.querySelectorAll("[data-indx-select='"+idx1+"'] > .cont_list_select_mate > ul")[0].style.height = "0px";
+                }
+            }
+
+        } // fin function open_select
+
+        function salir_select(indx){
+            var select_ = document.querySelectorAll("[data-indx-select='"+indx+"'] > select")[0];
+            document.querySelectorAll("[data-indx-select='"+indx+"'] > .cont_list_select_mate > ul")[0].style.height = "0px";
+            document.querySelector("[data-indx-select='"+indx+"'] > .icon_select_mate").style.transform = 'rotate(0deg)';
+            document.querySelectorAll("[data-indx-select='"+indx+"']")[0].setAttribute('data-selec-open','false');
+        }
+
+
+        function _select_option(indx,selc){
+            if (isMobileDevice()) {
+                selc = selc -1;
+            }
+            var select_ = document.querySelectorAll("[data-indx-select='"+selc+"'] > select")[0];
+
+            var li_s = document.querySelectorAll("[data-indx-select='"+selc+"'] .cont_select_int > li");
+            var p_act = document.querySelectorAll("[data-indx-select='"+selc+"'] > .selecionado_opcion")[0].innerHTML = li_s[indx].innerHTML;
+            var select_optiones = document.querySelectorAll("[data-indx-select='"+selc+"'] > select > option");
+            for (var i = 0; i < li_s.length; i++) {
+                if (li_s[i].className == 'active') {
+                    li_s[i].className = '';
+                };
+                li_s[indx].className = 'active';
+
+            };
+            select_optiones[indx].selected = true;
+            select_.selectedIndex = indx;
+            select_.onchange();
+            salir_select(selc);
+        }
+
+    </script>
+{% endblock %}

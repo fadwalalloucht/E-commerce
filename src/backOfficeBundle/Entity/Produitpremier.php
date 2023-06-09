@@ -1,0 +1,342 @@
+<?php
+
+namespace backOfficeBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Produitpremier
+ *
+ * @ORM\Table(name="produitpremier")
+ * @ORM\Entity(repositoryClass="backOfficeBundle\Repository\ProduitpremierRepository")
+ */
+class Produitpremier
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="titre", type="string", length=255)
+     */
+    private $titre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255)
+     */
+    private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="reference", type="string", length=255)
+     */
+    private $reference;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="prixHt", type="string", length=255)
+     */
+    private $prixHt;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="TVA", type="integer")
+     */
+    private $tVA;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="prixTtc", type="integer")
+     */
+    private $prixTtc;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="quantiter", type="integer")
+     */
+    private $quantiter;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="IdCategorie", type="integer")
+     */
+    private $idCategorie;
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateAjout", type="date")
+     */
+    private $dateAjout;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="urlfile", type="string", length=255, nullable=true)
+     */
+    private $urlfile;
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set titre
+     *
+     * @param string $titre
+     *
+     * @return Produitpremier
+     */
+    public function setTitre($titre)
+    {
+        $this->titre = $titre;
+
+        return $this;
+    }
+
+    /**
+     * Get titre
+     *
+     * @return string
+     */
+    public function getTitre()
+    {
+        return $this->titre;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Produitpremier
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set reference
+     *
+     * @param string $reference
+     *
+     * @return Produitpremier
+     */
+    public function setReference($reference)
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    /**
+     * Get reference
+     *
+     * @return string
+     */
+    public function getReference()
+    {
+        return $this->reference;
+    }
+
+    /**
+     * Set prixHt
+     *
+     * @param string $prixHt
+     *
+     * @return Produitpremier
+     */
+    public function setPrixHt($prixHt)
+    {
+        $this->prixHt = $prixHt;
+
+        return $this;
+    }
+
+    /**
+     * Get prixHt
+     *
+     * @return string
+     */
+    public function getPrixHt()
+    {
+        return $this->prixHt;
+    }
+
+    /**
+     * Set tVA
+     *
+     * @param integer $tVA
+     *
+     * @return Produitpremier
+     */
+    public function setTVA($tVA)
+    {
+        $this->tVA = $tVA;
+
+        return $this;
+    }
+
+    /**
+     * Get tVA
+     *
+     * @return int
+     */
+    public function getTVA()
+    {
+        return $this->tVA;
+    }
+
+    /**
+     * Set prixTtc
+     *
+     * @param integer $prixTtc
+     *
+     * @return Produitpremier
+     */
+    public function setPrixTtc($prixTtc)
+    {
+        $this->prixTtc = $prixTtc;
+
+        return $this;
+    }
+
+    /**
+     * Get prixTtc
+     *
+     * @return int
+     */
+    public function getPrixTtc()
+    {
+        return $this->prixTtc;
+    }
+
+    /**
+     * Set quantiter
+     *
+     * @param integer $quantiter
+     *
+     * @return Produitpremier
+     */
+    public function setQuantiter($quantiter)
+    {
+        $this->quantiter = $quantiter;
+
+        return $this;
+    }
+
+    /**
+     * Get quantiter
+     *
+     * @return int
+     */
+    public function getQuantiter()
+    {
+        return $this->quantiter;
+    }
+
+    /**
+     * Set idCategorie
+     *
+     * @param integer $idCategorie
+     *
+     * @return Produitpremier
+     */
+    public function setIdCategorie($idCategorie)
+    {
+        $this->idCategorie = $idCategorie;
+
+        return $this;
+    }
+
+    /**
+     * Get idCategorie
+     *
+     * @return int
+     */
+    public function getIdCategorie()
+    {
+        return $this->idCategorie;
+    }
+
+    /**
+     * Set dateAjout
+     *
+     * @param \DateTime $dateAjout
+     *
+     * @return Produitpremier
+     */
+    public function setDateAjout($dateAjout)
+    {
+        $this->dateAjout = $dateAjout;
+
+        return $this;
+    }
+
+    /**
+     * Get dateAjout
+     *
+     * @return \DateTime
+     */
+    public function getDateAjout()
+    {
+        return $this->dateAjout;
+    }
+
+    /**
+     * Set urlfile
+     *
+     * @param string $urlfile
+     *
+     * @return Produitpremier
+     */
+    public function setUrlfile($urlfile)
+    {
+        $this->urlfile = $urlfile;
+
+        return $this;
+    }
+
+    /**
+     * Get urlfile
+     *
+     * @return string
+     */
+    public function getUrlfile()
+    {
+        return $this->urlfile;
+    }
+}

@@ -1,0 +1,6 @@
+<div class="dropdown-menu">
+    {% for g in sousCats %}
+        <a class="dropdown-item" href="/produit/{{ g.nom|replace({"/":"-"," ":"-" }) }}/{{ g.idCategorie }}/{{ g.id }}/" style="width: 32%;" >{{ g.nom }}</a>
+    {% endfor %}
+</div>
+

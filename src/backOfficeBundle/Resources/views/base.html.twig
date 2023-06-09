@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+        {% block title %}
+
+        {% endblock title %}
+    </title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('bundles/plugins/fontawesome-free/css/all.min.css') }}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bbootstrap 4 -->
+    <link rel="stylesheet" href="{{ asset('bundles/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="{{ asset('bundles/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+    <!-- JQVMap -->
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('bundles/dist/css/adminlte.min.css') }}">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="{{ asset('bundles/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="{{ asset('bundles/plugins/daterangepicker/daterangepicker.css') }}">
+    <!-- summernote -->
+    <link rel="stylesheet" href="{{ asset('bundles/plugins/summernote/summernote-bs4.css') }}">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('/Bundle/ST/css/animate.css') }}" />
+    <link rel="stylesheet" href="{{ asset("bundles/plugins/datatables-bs4/css/dataTables.bootstrap4.css") }}">
+
+    {% block style %}
+    {% endblock style %}
+</head>
+<style>
+    /*-------------LOADER---------------*/
+
+    div.fadeMe {
+        background: rgba(0,0,0, 0.7);
+        width:      100%;
+        height:     100%;
+
+        top:        0;
+        left:       0;
+        position:   fixed;
+        visibility: hidden;
+        z-index: 9000;
+    }
+</style>
+<div class="fadeMe">
+    <div id="charg" style="position:relative;top:40%;">
+        <center><img src="{{ asset('bundles/dist/img/loader.gif') }}" width="150px">
+            <br><br/>
+            <font color="#ffffff">
+                <h2>Opération en cours, veuillez patienter...</h2>
+            </font>
+        </center>
+    </div>
+</div>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+            </li>
+        </ul>
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+            <!-- Notifications Dropdown Menu -->
+            {{ render(controller('backOfficeBundle:Default:notificationHeader')) }}
+        </ul>
+    </nav>
+    <!-- /.navbar -->
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <!-- Brand Logo -->
+        <a href="/index/" class="brand-link">
+            <img src="{{ asset('Bundle/assets/images/logo2.png') }}"  class="brand-image" style="height: 41px!important;">
+            <span class="brand-text font-weight-light">Admin</span>
+        </a>
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Sidebar user panel (optional) -->
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <img src="{{ asset('bundles/dist/img/avatar5.png') }}" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="info">
+                    <a href="/profil-admin/" class="d-block">{{ app.session.get("user").nom }} {{  app.session.get("user").prenom }}</a>
+                </div>
+            </div>
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item">
+                        <a href="/index1/" class="nav-link">
+                            <i class="fas fa-chart-pie"></i>
+                            <p>
+                                Statistiques
+                                <span class="right badge badge-danger"></span>
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-user"></i>
+                            <p>
+                                Adminstrateur
+                                <i class="fas fa-angle-left right"></i>
+                                <span class="badge badge-info right"></span>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/list-adminstrateur/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Liste des adminstrateurs</p>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/add-adminstrateur/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Nouveau adminstrateur</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="fa fa-users fa-fw"></i>
+                            <p>
+                                Clients
+                                <i class="fas fa-angle-left right"></i>
+                                <span class="badge badge-info right"></span>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/list-client-site/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Liste des clients</p>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/add-client/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Nouveau client</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-cubes"></i>
+                            <p>
+                                Stock
+                                <i class="fas fa-angle-left right"></i>
+                                <span class="badge badge-info right"></span>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/list-ProduitMP-site/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Produits Matiere Première </p>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/list-ProduitStock-site/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Produits de stock</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="fab fa-product-hunt"></i>
+                            <p>
+                                Produits de site
+                                <i class="fas fa-angle-left right"></i>
+                                <span class="badge badge-info right"></span>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/list-product-site/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Liste des produits</p>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/add-product-site/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Nouveau Produit</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <p>
+                                Devis
+                                <i class="fas fa-angle-left right"></i>
+                                <span class="badge badge-info right"></span>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/list-devis/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Liste des devis </p>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/add-devis-site/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Nouveau devis</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/list-projet/" class="nav-link">
+                            <i class="fab fa-product-hunt"></i>
+                            <p>
+                                Projet
+                                <span class="right badge badge-danger"></span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-file-invoice"></i>
+                            <p>
+                                Facture
+                                <i class="fas fa-angle-left right"></i>
+                                <span class="badge badge-info right"></span>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/list-facture/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Liste des factures </p>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/add-Facture-site/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Nouvelle Facture</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/list-utilisateurs/" class="nav-link">
+                            <i class="far fa-user-circle"></i>
+                            <p>
+                                Utilisateurs
+                                <span class="right badge badge-danger"></span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/list-commandes/" class="nav-link">
+                            <i class="fas fa-truck"></i>
+                            <p>
+                                Commandes
+                                <span class="right badge badge-danger"></span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/list-product-site-promotion/" class="nav-link">
+                            <i class="far fa-minus-square"></i>
+                            <p>
+                                Promotion
+                                <span class="right badge badge-danger"></span>
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="fa fa-users fa-fw"></i>
+                            <p>
+                                Fournisseurs
+                                <i class="fas fa-angle-left right"></i>
+                                <span class="badge badge-info right"></span>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/list-fournisseur-site/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Liste des fournisseurs</p>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/add-fournisseur-site/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Nouveau fournisseur</p>
+                                </a>
+                            </li>
+                        </ul>
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <p>
+                                Facture Fournisseur
+                                <i class="fas fa-angle-left right"></i>
+                                <span class="badge badge-info right"></span>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/list-FactureFournisseur-site/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Liste des factures fournisseurs </p>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/add-FactureFournisseur-site/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Nouveau Facture</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    </li>
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-money-check-alt"></i>
+                            <p>
+                                Charge
+                                <i class="fas fa-angle-left right"></i>
+                                <span class="badge badge-info right"></span>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/list-charge-site/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Liste des charges</p>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/add-charge-site/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Nouvelle charge</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/newsletters/" class="nav-link">
+                            <i class="fas fa-at"></i>
+                            <p>
+                                Newsletters
+                                <span class="right badge badge-danger"></span>
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item has-treeview">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-cogs"></i>
+                            <p>
+                                paramétrages
+                                <i class="fas fa-angle-left right"></i>
+                                <span class="badge badge-info right"></span>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/slider/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p> Slider </p>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/siteWeb/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p> Site Web  </p>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/colors/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p> Couleurs </p>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/addTailles/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p> Unités </p>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/entreprise/" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p> Entreprise </p>
+                                </a>
+                            </li>
+                        </ul>
+
+
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/deconnect-admin/" class="nav-link">
+                            <i class="fas fa-power-off"></i>
+                            <p>
+                                Déconnexion
+                                <span class="right badge badge-danger"></span>
+                            </p>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+
+
+
+            <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+
+    {% block body %}
+
+    {% endblock body %}
+
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+        <strong>Copyright &copy; 2020 <a href="http://proxisoft.ma/">PROXISOFT</a>.</strong>
+        TOUS DROITS RESERVÉS .
+        <div class="float-right d-none d-sm-inline-block">
+
+        </div>
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    {% block modal %}{% endblock %}
+    <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+
+
+<!-- jQuery -->
+<script src="{{ asset('bundles/plugins/jquery/jquery.min.js') }}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="{{ asset('bundles/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+
+<!-- Bootstrap 4 -->
+<script src="{{ asset('bundles/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<!-- ChartJS -->
+<script src="{{ asset('bundles/plugins/chart.js/Chart.min.js') }}"></script>
+<!-- Sparkline -->
+<script src="{{ asset('bundles/plugins/sparklines/sparkline.js') }}"></script>
+<!-- JQVMap -->
+
+<!-- jQuery Knob Chart -->
+<script src="{{ asset('bundles/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+<!-- daterangepicker -->
+<script src="{{ asset('bundles/plugins/moment/moment.min.js') }}"></script>
+<script src="{{ asset('bundles/plugins/daterangepicker/daterangepicker.js') }}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{{ asset('bundles/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+<!-- Summernote -->
+<script src="{{ asset('bundles/plugins/summernote/summernote-bs4.min.js') }}"></script>
+<!-- overlayScrollbars -->
+<script src="{{ asset('bundles/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+<!-- AdminLTE App -->
+<script src="{{ asset('bundles/dist/js/adminlte.js') }}"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="{{ asset('bundles/dist/js/pages/dashboard.js') }}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{{ asset('bundles/dist/js/demo.js') }}"></script>
+<script src="{{ asset("bundles/plugins/datatables/jquery.dataTables.js") }}"></script>
+<script src="{{ asset("bundles/plugins/datatables-bs4/js/dataTables.bootstrap4.js") }}"></script>
+<script>
+    $.widget.bridge('uibutton', $.ui.button)
+</script>
+<script type="text/javascript" src="{{ asset('/Bundle/ST/js/jquery.popupoverlay.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/Bundle/ST/js/noty/packaged/jquery.noty.packaged.min.js') }}"></script>
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+        bsCustomFileInput.init();
+    });
+
+    function loaderChangePage(){
+        $("#progress").removeClass("done");
+        $({property: 0}).animate({property: 50}, {
+            duration: 2000,
+            step: function() {
+                var _percent = Math.round(this.property);
+                $('#progress').css('width',  _percent+"%");
+                if(_percent == 70) {
+                    //$("#progress").addClass("done");
+                }
+            },
+            complete: function() {
+                //alert('complete');
+            }
+        });
+    }
+
+    $( document ).ready(function() {
+        $({property: 50}).animate({property: 105}, {
+            duration: 1000,
+            step: function() {
+                var _percent = Math.round(this.property);
+                $('#progress').css('width',  _percent+"%");
+                if(_percent == 105) {
+                    $("#progress").addClass("done");
+                }
+            },
+            complete: function() {
+                $("#progress").addClass("done");
+            }
+        });
+    });
+</script>
+{% block js %}
+{% endblock js %}
+</body>
+</html>

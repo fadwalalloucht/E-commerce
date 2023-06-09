@@ -1,0 +1,98 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+    AJOUTER IMAGE DE PRODUIT
+{% endblock title %}
+    {% block style %}
+        <link rel="stylesheet" href="{{ asset('Bundle/ST/css/dropzone.css') }}">
+    {% endblock style %}
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Nouveau produit (Etape 3 : images)</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">Nouveau produit</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Nouveau produit (Etape 3 : images)</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <!-- form start -->
+                                <form action="/file-upload/?id={{ id }}" class="dropzone MyDropzone" id="MyDropzone" style="overflow: auto;margin-bottom: 5px;">
+                                    <div class="fallback">
+                                        <input name="file" type="file" multiple />
+                                    </div>
+                                    <div class="dz-error-mark"><span>Pour ajouter une image, cliquez sur la zone grise ou glissez simplement l'image </span><br/></div>
+                                </form>
+                                <div style="text-align: center;">
+                                    <a href="/list-product-site/" class="btn btn-success">Terminer</a>
+                                </div>
+                                <div id="response" style="margin-top: 10px;">
+                                </div>
+                                <!-- form end -->
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </section>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="{{ asset('Bundle/ST/js/dropzone.js') }}"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+            //Dropzone.autoDiscover = false; // keep this line if you have multiple dropzones in the same page
+            $(".MyDropzone").dropzone({
+                acceptedFiles: "image/jpeg,image/png",
+                //maxFiles: 1, // Number of files at a time
+                maxFilesize: 2, //in MB
+                success: function (file,response) {
+                    $(file.previewTemplate).find('.dz-remove').attr('id', response);
+                },
+                addRemoveLinks: true,
+                removedfile: function(file) {
+                    var id = $(file.previewTemplate).find('.dz-remove').attr('id');
+
+                    $.ajax({
+                        type: 'get',
+                        url: '/delete-image/?id='+id,
+                        success: function(data){
+                            if(data.response=="OK"){
+                                var _ref; // Remove file on clicking the 'Remove file' button
+                                return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+                            }
+                        }
+                    });
+
+                }
+            });
+        });
+
+
+    </script>
+{% endblock js %}

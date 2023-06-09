@@ -1,0 +1,543 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+    SLIDER
+{% endblock title %}
+{% block style %}
+
+{% endblock style %}
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Slider</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceul</a></li>
+                            <li class="breadcrumb-item active">Slider</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h1 class="page-header" style="text-align: right;"><a class="btn btn-success fadeandscale_open">Ajouter slide</a></h1>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Liste slider</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <!-- form start -->
+
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>Image</th>
+                                                <th>Titre</th>
+                                                <th>Text</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for m in slider %}
+                                                <tr>
+                                                    <td><img src="{{ m.urlImage }}" style="height: 70px;"> </td>
+                                                    <td>{{ m.titre }} </td>
+                                                    <td>{{ m.text }}</td>
+
+                                                    <td>
+                                                        <center><a class="btn btn-danger" onclick="deleteSlider({{ m.id }})"><i class="fa fa-trash"></i></a></center>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- /.table-responsive -->
+                                </div>
+                                <!-- form end -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </section>
+    </div>
+    <div id="fadeandscale" class="well">
+        <div id="boxBody">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">ajouter slider</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                <input type="hidden" name="formName" value="addMarque">
+                <div class="form-group">
+                    <label>Titre :</label>
+                    <input type="text" class="form-control" id="titre" name="titre">
+                </div>
+                <div class="form-group">
+                    <label>Text :</label>
+                    <input type="text" class="form-control" id="text" name="text">
+                </div>
+                <div class="form-group">
+                    <label>Image</label>
+                    <input type="file" id="my-file" name="fichier" type="file" accept="image/*">
+                </div>
+                <div style="text-align: center;">
+                    <button type="submit" class="btn btn-success" id="submit">Enregistrer</button>
+                </div>
+            </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}
+
+{% block js %}
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/jquery.popupoverlay.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/noty/packaged/jquery.noty.packaged.min.js') }}"></script>
+
+    <script type="text/javascript">
+
+        var response = "{{ response }}";
+
+        if(response != ""){
+            if(response != "OK"){
+                messageUpdate(response,"error");
+            }
+            else{
+                messageUpdate("Slide ajouté !","success");
+            }
+        }
+
+        function messageUpdate(message,typeMessage) {
+            noty({
+                text: message,
+                type: typeMessage,
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 3000,
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+        }
+
+        function deleteSlider(id){
+            noty({
+                text: 'Etes vous sûr de vouloir supprimer le slide ? ',
+                type: 'confirm',
+                theme: 'relax',
+                layout: 'center',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                },
+                buttons     : [
+                    {addClass: 'btn btn-primary', text: 'Oui', onClick: function ($noty) {
+                            loaderChangePage();
+                            $(".fadeMe").css("visibility","visible");
+                            var url = '/delete-slide/?id='+id;
+                            $.ajax({
+                                type: 'get',
+                                url: url,
+                                success: function(data){
+                                    if(data.response=="OK"){
+                                        window.location = "/slider/";
+                                    }
+                                    else{
+                                        messageUpdate("Une erreur s'est produite","error");
+                                        $("#progress").addClass("done");
+                                        $(".fadeMe").css("visibility","hidden");
+                                    }
+                                }
+                            });
+
+                            $noty.close();
+
+                        }
+                    },
+                    {addClass: 'btn btn-danger', text: 'Non', onClick: function ($noty) {
+                            $noty.close();
+
+                        }
+                    }
+                ]
+            });
+        }
+
+        $(document).ready(function () {
+
+            $('#fadeandscale').popup({
+                pagecontainer: '.container',
+                transition: 'all 0.3s'
+            });
+
+
+
+        });
+
+        function deleteVideoSlider(id){
+            noty({
+                text: 'Etes vous sûr de vouloir supprimer la video ? ',
+                type: 'confirm',
+                theme: 'relax',
+                layout: 'center',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                },
+                buttons     : [
+                    {addClass: 'btn btn-primary', text: 'Oui', onClick: function ($noty) {
+                            loaderChangePage();
+                            $(".fadeMe").css("visibility","visible");
+                            var url = '/delete-video-slider/?id='+id;
+                            $.ajax({
+                                type: 'get',
+                                url: url,
+                                success: function(data){
+                                    if(data.response=="OK"){
+                                        window.location = "/slider/";
+                                    }
+                                    else{
+                                        messageUpdate("Une erreur s'est produite","error");
+                                        $("#progress").addClass("done");
+                                        $(".fadeMe").css("visibility","hidden");
+                                    }
+                                }
+                            });
+
+                            $noty.close();
+
+                        }
+                    },
+                    {addClass: 'btn btn-danger', text: 'Non', onClick: function ($noty) {
+                            $noty.close();
+
+                        }
+                    }
+                ]
+            });
+        }
+
+        function activerVideo(id){
+            noty({
+                text: 'Etes vous sûr de vouloir continuer  ? ',
+                type: 'confirm',
+                theme: 'relax',
+                layout: 'center',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                },
+                buttons     : [
+                    {addClass: 'btn btn-primary', text: 'Oui', onClick: function ($noty) {
+                            loaderChangePage();
+                            $(".fadeMe").css("visibility","visible");
+                            var url = '/activer-video-slider/?id='+id;
+                            $.ajax({
+                                type: 'get',
+                                url: url,
+                                success: function(data){
+                                    if(data.response=="OK"){
+                                        window.location = "/slider/";
+                                    }
+                                    else{
+                                        messageUpdate("Une erreur s'est produite","error");
+                                        $("#progress").addClass("done");
+                                        $(".fadeMe").css("visibility","hidden");
+                                    }
+                                }
+                            });
+
+                            $noty.close();
+
+                        }
+                    },
+                    {addClass: 'btn btn-danger', text: 'Non', onClick: function ($noty) {
+                            $noty.close();
+
+                        }
+                    }
+                ]
+            });
+        }
+        function showForAdd(){
+
+            $('#modale').modal('show');
+
+
+            $("#addVideo").submit(function(event){
+
+                $(".fadeMe").css("visibility","visible");
+                event.preventDefault();
+                var formData = new FormData($(this)[0])
+                $.ajax({
+                    type : "POST",
+                    url: "/ajouter-video-slider/",
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success : function(data) {
+                        if (data.response == "OK") {
+                            $("#notif").html('');
+
+
+                            $(".fadeMe").css("visibility","hidden");
+                            $("#notif").append('<div class="alert alert-success alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> Opération effectué avec succée </div>');
+                            setTimeout(function(){ deselect()} , 2000);
+
+
+
+                        }else{
+                            $("#notif").html('');
+
+                            $(".fadeMe").css("visibility","hidden");
+                            $("#notif").append('<div class="alert alert-danger alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>'+data.response+'</div>');
+                        }
+
+                    },
+                    error: function() {
+                        $(".fadeMe").css("visibility","hidden");
+                        $("#notif").append('<div class="alert alert-danger alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> une erreur systeme interne s\'est produite veuillez contacter votre ingenieur IT </div>');
+                    }
+
+                });
+
+                return false;
+            });
+
+        }
+        function showForUp(id,lien){
+
+            $('#modale').modal('show');
+            $("#lienVideo").val(lien);
+
+
+            $("#addVideo").submit(function(event){
+
+                $(".fadeMe").css("visibility","visible");
+                event.preventDefault();
+                var formData = new FormData($(this)[0])
+                $.ajax({
+                    type : "POST",
+                    url: "/modifier-video-slider/?id="+id,
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success : function(data) {
+                        if (data.response == "OK") {
+                            $("#notif").html('');
+
+
+                            $(".fadeMe").css("visibility","hidden");
+                            $("#notif").append('<div class="alert alert-success alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> Opération effectué avec succée </div>');
+                            setTimeout(function(){ deselect()} , 2000);
+
+
+
+                        }else{
+                            $("#notif").html('');
+
+                            $(".fadeMe").css("visibility","hidden");
+                            $("#notif").append('<div class="alert alert-danger alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>'+data.response+'</div>');
+                        }
+
+                    },
+                    error: function() {
+                        $(".fadeMe").css("visibility","hidden");
+                        $("#notif").append('<div class="alert alert-danger alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> une erreur systeme interne s\'est produite veuillez contacter votre ingenieur IT </div>');
+                    }
+
+                });
+
+                return false;
+            });
+
+        }
+        function deselect() {
+
+            $("#lienVideo").html('');
+            $('#modale').modal('hide');
+            setTimeout(function(){ window.location.reload(true);} , 1000);
+        }
+
+        function deselectP() {
+
+            $("#lienSlider").html('');
+            $('#mymodale').modal('hide');
+            setTimeout(function(){ window.location.reload(true);} , 1000);
+
+
+        }
+        function activerSlider(id){
+            noty({
+                text: 'Etes vous sûr de vouloir continuer  ? ',
+                type: 'confirm',
+                theme: 'relax',
+                layout: 'center',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                },
+                buttons     : [
+                    {addClass: 'btn btn-primary', text: 'Oui', onClick: function ($noty) {
+                            loaderChangePage();
+                            $(".fadeMe").css("visibility","visible");
+                            var url = '/activer-image-slider/?id='+id;
+                            $.ajax({
+                                type: 'get',
+                                url: url,
+                                success: function(data){
+                                    if(data.response=="OK"){
+                                        window.location = "/slider/";
+                                    }
+                                    else{
+                                        messageUpdate("Une erreur s'est produite","error");
+                                        $("#progress").addClass("done");
+                                        $(".fadeMe").css("visibility","hidden");
+                                    }
+                                }
+                            });
+
+                            $noty.close();
+
+                        }
+                    },
+                    {addClass: 'btn btn-danger', text: 'Non', onClick: function ($noty) {
+                            $noty.close();
+
+                        }
+                    }
+                ]
+            });
+        }
+
+        function activerAllSlider(){
+            noty({
+                text: 'Etes vous sûr de vouloir continuer  ? ',
+                type: 'confirm',
+                theme: 'relax',
+                layout: 'center',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                },
+                buttons     : [
+                    {addClass: 'btn btn-primary', text: 'Oui', onClick: function ($noty) {
+                            loaderChangePage();
+                            $(".fadeMe").css("visibility","visible");
+                            var url = '/activer-all-slider/';
+                            $.ajax({
+                                type: 'get',
+                                url: url,
+                                success: function(data){
+                                    if(data.response=="OK"){
+                                        window.location = "/slider/";
+                                    }
+                                    else{
+                                        messageUpdate("Une erreur s'est produite","error");
+                                        $("#progress").addClass("done");
+                                        $(".fadeMe").css("visibility","hidden");
+                                    }
+                                }
+                            });
+
+                            $noty.close();
+
+                        }
+                    },
+                    {addClass: 'btn btn-danger', text: 'Non', onClick: function ($noty) {
+                            $noty.close();
+
+                        }
+                    }
+                ]
+            });
+        }
+
+        function updateSlider(id,lien){
+
+            $('#mymodale').modal('show');
+            $("#lienSlider").val(lien);
+
+
+            $("#addSlider").submit(function(event){
+
+                $(".fadeMe").css("visibility","visible");
+                event.preventDefault();
+                var formData = new FormData($(this)[0])
+                $.ajax({
+                    type : "POST",
+                    url: "/modifier-lien-slider/?id="+id,
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success : function(data) {
+                        if (data.response == "OK") {
+                            $("#notifP").html('');
+
+
+                            $(".fadeMe").css("visibility","hidden");
+                            $("#notifP").append('<div class="alert alert-success alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> Opération effectué avec succée </div>');
+                            setTimeout(function(){ deselectP()} , 2000);
+
+
+
+                        }else{
+                            $("#notifP").html('');
+
+                            $(".fadeMe").css("visibility","hidden");
+                            $("#notifP").append('<div class="alert alert-danger alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>'+data.response+'</div>');
+                        }
+
+                    },
+                    error: function() {
+                        $(".fadeMe").css("visibility","hidden");
+                        $("#notifP").append('<div class="alert alert-danger alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> une erreur systeme interne s\'est produite veuillez contacter votre ingenieur IT </div>');
+                    }
+
+                });
+
+                return false;
+            });
+
+        }
+    </script>
+{% endblock js %}

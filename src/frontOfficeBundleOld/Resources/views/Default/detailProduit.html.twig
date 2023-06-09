@@ -1,0 +1,537 @@
+{% extends "@frontOffice/base1.html.twig" %}
+{% block title %}
+    {% if article['obj'].titre is defined  %}{{ article['obj'].titre }}{% endif %}
+{% endblock title %}
+{% block desc %}{{ article['obj'].description|striptags|slice(0,90)|raw }} ...{% endblock %}
+{% block metashare %}
+
+    <meta content='{{ article['obj'].titre }}' property='og:title'/>
+    <meta content='article' property='og:type'/>
+    <meta content='{{ app.request.uri }}' property='og:url'/>
+    <meta content='' property='og:description'/>
+    <meta content="ELOUFIRDESIGN" property='og:site_name'/>
+    <meta content='summary' name='twitter:card'/>
+    <meta content="{{ article['obj'].titre }}" name='twitter:title'/>
+
+{% endblock %}
+{% block body %}
+    <div class="hero-wrap hero-bread" style="background-image: url({{ asset('Bundle/assets/images/5.png') }});">
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-9 ftco-animate text-center">
+                    <h1 class="mb-0 bread">{{ article['obj'].titre }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mb-5 ftco-animate">
+                    {% for a in article['img'] %}
+                        {% if loop.first %}
+                            <a href="{{ a.urlImg }}" class="image-popup prod-img-bg"><img src="{{ a.urlImg }}" class="img-fluid" alt="image produit"></a>
+                        {% endif %}
+                    {% endfor %}
+
+                </div>
+                <div class="col-lg-6 product-details pl-md-5 ftco-animate">
+                    <h3>{% if article['obj'].titre is defined  %}{{ article['obj'].titre }}{% endif %}</h3>
+                    <p class="price">
+                        {% if article["obj1"].prix > article["prix"] %}
+                            <span class="text-danger"><span id="idNewPrix" class="text-danger">{{ article["prix"] }}  </span> MAD</span>
+                            <del id="idPrix" style="color: #1e1e1e;font-size: 10px;">
+                                {{ article["obj1"].prix }} MAD
+                            </del>
+                        {% else %}
+                            <span id="idNewPrix">{{ article["obj1"].prix }}  </span> MAD
+                        {% endif %}
+                    </p>
+                    <div class="down-content">
+                        <div class="categories">
+                            <h6>Catégorie: <span>{% if article['cat'].nom is defined  %}{{ article['cat'].nom }}{% endif %}</span></h6>
+                        </div>
+                    </div>
+                    <p>{% if article['obj'].description is defined  %}{{ article['obj'].description|raw }}{% endif %} </p>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex">
+                                <div class="select-wrap row">
+                                    <label class="input-group-text col-md-8" id="idTaille" name="taille">{{ tailles.titleTaille }} </label>{% if tailles.valeurTaille!="" %}<input name="valeur" id="idValeur" class="form-control col-md-4" type="text" value="{{ tailles.valeurTaille }}" readonly>{% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="input-group col-md-6 d-flex mb-3">
+                            <input type="number"  id="quantite" class="quantity form-control input-number"
+                                   onfocus="if(this.value == '1') { this.value = ''; }"
+                                   onBlur="if(this.value == '') { this.value = '1';}"
+                                   value="1" onkeyup="changeQuantite({{ article['obj1'].id }},null)" onchange="changeQuantite({{ article['obj1'].id }},null)">
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-12">
+                            <p style="color: #000;">
+                                <span>
+                                    Disponibilité :
+                                    {% if article['obj'].disp == 1 %}
+                                        <span style="color:#128D3B">Disponible</span>
+                                    {% else %}
+                                        <span style="color:#8D2A12">Sur commande</span>
+                                    {% endif %}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <p><a href="#" class="btn btn-primary py-3 px-5" onclick="addToPanierProductDetail({{ article['obj'].id }},null,'{{ tailles.titleTaille }}','{{ tailles.valeurTaille }}');">Ajouter au panier</a></p>
+                    <div class="share">
+                        <h6>Partager:&nbsp;&nbsp;&nbsp;
+                            <span>
+                                <a href="http://www.facebook.com/sharer.php?u={{ app.request.uri }}" target="_blank">
+                                    <i class="icon-facebook"></i>
+                                </a>&nbsp;&nbsp;&nbsp;
+                                <a href="https://plus.google.com/share?url={{ app.request.uri }}">
+                                    <i class="icon-google-plus"></i>
+                                </a>&nbsp;&nbsp;&nbsp;
+                                <a href="https://twitter.com/share?url={{ app.request.uri }}&amp;text={{ article['obj'].titre }}&amp;hashtags=ASSAYDE maroc">
+                                    <i class="icon-twitter"></i>
+                                </a>
+                            </span>
+                        </h6>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-12 nav-link-wrap">
+                    <div class="nav nav-pills d-flex text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <a class="nav-link ftco-animate active mr-lg-1" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">Description</a>
+
+                        <a class="nav-link ftco-animate mr-lg-1" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false">Caractéristiques techniques</a>
+
+                        <a class="nav-link ftco-animate" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false">Couleurs disponibles</a>
+
+                    </div>
+                </div>
+                <div class="col-md-12 tab-wrap">
+
+                    <div class="tab-content bg-light" id="v-pills-tabContent">
+
+                        <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="day-1-tab">
+                            <div class="p-4">
+                                <h3 class="mb-4">{% if article['obj'].titre is defined  %}{{ article['obj'].titre }}{% endif %}</h3>
+                                <p>{% if article['obj'].description is defined  %}{{ article['obj'].description|raw }}{% endif %}</p>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-day-2-tab">
+                            <div class="p-4">
+                                <h3 class="mb-4">Caractéristiques techniques</h3>
+                                <p>
+                                    {% if article['obj1'].Poids is defined and article['obj1'].Poids > 0 %}
+                                <p style="display: block" id="idPoids">Poids : {{ article['obj1'].Poids }} KG.</p>
+                                {% endif %}
+                                {% if article['obj1'].Hauteur is defined and article['obj1'].Hauteur > 0 %}
+                                    <p style="display: block" id="idHauteur">Hauteur : {{ article['obj1'].Hauteur }} CM.</p>
+                                {% endif %}
+                                {% if article['obj1'].Puissance is defined and article['obj1'].Puissance > 0 %}
+                                    <p style="display: block" id="idPuissance">Puissance : {{ article['obj1'].Puissance }} LBS.</p>
+                                {% endif %}
+                                {% if article['obj1'].Longeur is defined and article['obj1'].Longeur > 0 %}
+                                    <p style="display: block" id="idLongeur">Longeur : {{ article['obj1'].Longeur }} CM.</p>
+                                {% endif %}
+                                {% if article['obj1'].Largeur is defined and article['obj1'].Largeur > 0 %}
+                                    <p style="display: block" id="idLargeur">Largeur {{ article['obj1'].Largeur }} CM.</p>
+                                {% endif %}
+                                </p>                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-day-3-tab">
+                            <div class="row p-4">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th>Unité</th>
+                                        <th>Couleurs disponibles</th>
+                                        {% if article['obj1'].Poids > 0 or article['obj1'].Hauteur > 0 or article['obj1'].Puissance > 0 or
+                                            article['obj1'].Longeur > 0 or article['obj1'].Largeur > 0 %}
+                                            <th>Longeur</th>
+                                            <th>Largeur</th>
+                                            <th>Hauteur</th>
+                                            <th>Poids</th>
+                                            <th>Puissance</th>
+                                        {% endif %}
+                                        <th>Prix unitaire</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for t in table %}
+                                        <tr>
+                                            <td>{{ t["obj2"].titleTaille }} {{ t["obj2"].valeurTaille }} </td>
+                                            <td>
+                                                {% if article["colors"]|length > 0 %}
+                                                    {% set i = 0 %}
+                                                    {% for c in article["colors"] %}
+                                                        <center>
+                                                            <div id ="{{ c.id }}" onclick="getColorInfos({{ c.id }},{{ article["obj"].id}})" class="cerColor {% if i == 0 %}cercleColorSelected{% endif %}" style="width: 25px;height: 25px;border-radius: 50%;background: {{ c.code }};display: block;"></div>
+                                                        </center>
+                                                        {% set i = 1 %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </td>
+                                            {% if article['obj1'].Poids > 0 or article['obj1'].Hauteur > 0 or article['obj1'].Puissance > 0 or
+                                                article['obj1'].Longeur > 0 or article['obj1'].Largeur > 0 %}
+
+                                                <td>{{ t["obj2"].Longeur }}</td>
+                                                <td>{{ t["obj2"].Largeur }}</td>
+                                                <td>{{ t["obj2"].Hauteur }}</td>
+                                                <td>{{ t["obj2"].Poids }}</td>
+                                                <td>{{ t["obj2"].Puissance }}</td>
+                                            {% endif %}
+                                            <td><b style="color: #3a8bcd;">{{ t["pr"] }} MAD</b></td>
+                                            <td>
+                                                {% if t['qtsall']==1 %}
+                                                    <a href="" type="button" onclick="addToPanierProductDetail({{ t["obj2"].idProduit }},1,'{{ t["obj2"].titleTaille }}','{{ t["obj2"].valeurTaille }}');">
+                                                        <i class="icon-shopping_cart"></i>
+                                                    </a>
+                                                {% endif %}
+                                                {% if t['qtsall']==0 %}
+                                                    <a type="button">
+                                                        <span>Stock epuisé</span>
+                                                    </a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{ render(controller('frontOfficeBundle:Default:derniereConsultation')) }}
+    {% if suggestion|length != 0 and promotion|length != 0  %}
+
+        <section class="ftco-section bg-light">
+            <div class="container">
+                <div class="row justify-content-center mb-3 pb-3">
+                    <div class="col-md-12 heading-section text-center ftco-animate">
+                        <h2 class="mb-4">ALTERNATIVES INTÉRESSANTES</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    {% for p in suggestion %}
+                        <div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
+                            <div class="product d-flex flex-column">
+                                <a href="/produit_detail/{{ p['obj'].titre|replace({"/":"-"," ":"-" }) }}/{{ p['obj'].id }}" class="img-prod"><img class="img-fluid" src="{{ asset( p["img"] ) }}">
+                                    <div class="overlay"></div>
+                                </a>
+                                <div class="text py-3 pb-4 px-3">
+                                    <div class="d-flex">
+                                        <div class="cat">
+                                            <span>{% if p["cat"] != null %}{{ p["cat"].nom }}{% endif %}</span>
+                                        </div>
+                                        <div class="rating">
+                                            <p class="text-right mb-0">
+                                                <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                                <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                                <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                                <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                                <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <h3><a href="#">{{ p["obj"].titre|slice(0,30) }}</a></h3>
+                                    <div class="pricing">
+                                        <p class="price">
+                                            <span>
+                                            {% if p["obj"].prix > p["prix"] %}
+                                                <del>
+                                                {{ p["obj"].prix }} MAD
+                                            </del>
+                                                <i style="color:#0080FF;padding-left:10px;">{{ p["prix"] }} MAD </i>
+                                            {% else %}
+                                                {{ p["prix"] }} MAD
+                                            {% endif %}
+                                        </span>
+                                        </p>
+                                    </div>
+                                    <p class="bottom-area d-flex px-3">
+                                        <a href="/produit_detail/{{ p['obj'].titre|replace({"/":"-"," ":"-" }) }}/{{ p['obj'].id }}" class="add-to-cart text-center py-2 mr-1">Voir le produit<span><i class="ion-ios-cart ml-1"></i></span></a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        {% if promotion|length != 0 %}
+            <section class="ftco-section bg-light">
+                <div class="container">
+                    <div class="row justify-content-center mb-3 pb-3">
+                        <div class="col-md-12 heading-section text-center ftco-animate">
+                            <h2 class="mb-4">Produits en promotion</h2>
+                            <p> text paragraphe</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        {% for p in promotion %}
+                            <div class="col-sm-12 col-md-6 col-lg-3 ftco-animate d-flex">
+                                <div class="product d-flex flex-column">
+                                    <a href="/produit_detail/{{ p['obj1'].titre|replace({"/":"-"," ":"-" }) }}/{{ p['obj1'].id }}" class="img-prod"><img class="img-fluid" src="{{ asset( p["img"] ) }}">
+                                        <div class="overlay"></div>
+                                    </a>
+                                    <div class="text py-3 pb-4 px-3">
+                                        <div class="d-flex">
+                                            <div class="cat">
+                                                <span>Catégorie</span>
+                                            </div>
+                                            <div class="rating">
+                                                <p class="text-right mb-0">
+                                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                                    <a href="#"><span class="ion-ios-star-outline"></span></a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <h3><a href="#">{{ p["obj1"].titre|slice(0,30) }}</a></h3>
+                                        <div class="pricing">
+                                            <p class="price">
+                                                <span style="color:red;">{{ p["obj"].newPrix }} MAD </span>
+                                                <del style="font-size: 10px;">
+                                                    {{ p["obj"].prix }} MAD
+                                                </del>
+                                            </p>
+                                        </div>
+                                        <p class="bottom-area d-flex px-3">
+                                            <a href="/produit_detail/{{ p['obj1'].titre|replace({"/":"-"," ":"-" }) }}/{{ p['obj1'].id }}" class="add-to-cart text-center py-2 mr-1">Voir le produit<span><i class="ion-ios-cart ml-1"></i></span></a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+    {% endif %}
+{% endblock body %}
+{% block js %}
+    <script type="text/javascript">
+
+        function changeQuantite(id){
+
+            var quantite = document.getElementById("quantite").value;
+
+            $.ajax({
+                type: 'get',
+                url: '/changeQuantite/?id='+id+'&quantite='+quantite,
+                success: function(data){
+                    if(data.response =="!NO"){
+                        document.getElementById('quantite').value = quantite;
+                    }
+                    else {
+                        errorCommande("Stock disponible ("+data.response+")")
+                        document.getElementById('quantite').value = data.response;
+                    }
+                }
+            });
+        }
+
+        function errorCommande(message) {
+            noty({
+                text: message,
+                type: 'error',
+                theme: 'relax',
+                layout: 'bottomCenter',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+            });
+        }
+
+        function getPrix()
+        {
+            var e = document.getElementById("idTaille");
+            var id = e.options[e.selectedIndex].value;
+
+            if(id !="")
+            {
+                $.ajax({
+                    method: 'post',
+                    url: '/getPrix/',
+                    data: {'taille': id,'idProduit':{{ article['obj'].id }}},
+                    success: function (data)
+                    {
+                        document.getElementById("idPrix").innerHTML =data.prix;
+                        document.getElementById("idNewPrix").innerHTML =data.newPrix;
+
+                        document.getElementById("idLongeur").innerHTML = 'Longeur : ' +data.Longeur+' CM.';
+                        document.getElementById("idLargeur").innerHTML ='Largeur : ' +data.Largeur+' CM.';
+                        document.getElementById("idHauteur").innerHTML ='Hauteur : ' +data.Hauteur+' CM.';
+                        document.getElementById("idPoids").innerHTML ='Poids : '+ data.Poids+' KG.';
+                        document.getElementById("idPuissance").innerHTML ='Puissance : '+ data.Puissance+' LBS.';
+                    }
+                });
+            }
+        }
+
+        function messageColor(message) {
+            noty({
+                text: message,
+                type: 'success',
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 1500,
+
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+        }
+
+        var colorSelected = {% if article["colors"]|length > 0 %}{{ article["colors"][0].id }}{% else %}0{% endif %};
+
+        function getColorInfos(id,idA){
+            document.getElementById(colorSelected).className = "cerColor";
+            document.getElementById(id).className = "cerColor cercleColorSelected";
+
+            colorSelected = id;
+            messageColor("La couleur a été sélectionnée");
+        }
+
+
+
+
+        cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field
+        function clearField(t){                   //declaring the array outside of the
+            if(! cleared[t.id]){                      // function makes it static and global
+                cleared[t.id] = 1;  // you could use true and false, but that's more typing
+                t.value='';         // with more chance of typos
+                t.style.color='#fff';
+            }
+        }
+
+
+        $(document).ready(function(){
+
+            $("#zoom_01").elevateZoom({gallery:'gallery_01', cursor: 'pointer', galleryActiveClass: 'active', loadingIcon: 'http://www.elevateweb.co.uk/spinner.gif'});
+
+            $('.clickImg').click(function(){
+                var src = $(this).children('img').attr('src');
+                var   src2=$('.clickImg1').children('img').attr('src');
+                $(this).children('img').attr("src",src2);
+                $("#zoom_01").data('zoom-image', src).elevateZoom({gallery:'gallery_01', cursor: 'pointer', galleryActiveClass: 'active', loadingIcon: 'http://www.elevateweb.co.uk/spinner.gif'});
+                $('.clickImg1').children('img').attr("src",src);
+
+
+
+            });
+            $('.clickImg1').click(function(){
+                var src3 = $(this).children('img').attr('src');
+
+                $('.div-hover-gallery').children('img').attr("src",src3);
+                $('.div-hover-gallery').toggle();
+
+            });
+
+            $('.div-hover-gallery').click(function(){
+
+                $(this).hide();
+
+            });
+
+        });
+
+        $.fn.tablr = function(){
+            // Set Active
+            $(this).find('.tabs-navigation li').first().addClass('active');
+
+            // Hide All Boxes and show first one
+            $(this).find('.tabs-content li').hide();
+            $(this).find('.tabs-content li').first().show();
+
+            // Get Clicks on Li in Navigation
+            $(this).find('.tabs-navigation li').click(function(){
+                if($(this).hasClass('active') == false) {
+                    // Get ID of Tab
+                    id = $(this).attr('id');
+                    tabid = 'content-'+id;
+
+                    // Set Active
+                    $(this).parent('.tabs-navigation').find('li').removeClass('active');
+                    $(this).addClass('active');
+
+                    // Hide all boxes
+                    $(this).parent('.tabs-navigation').parent('.tabs').find('.tabs-content li').hide();
+                    $(this).parent('.tabs-navigation').parent('.tabs').find('.tabs-content #'+tabid).show();
+                }
+            });
+        }
+        $(function(){
+            $('.tabs').tablr();
+        });
+        //--------------------
+        $('.item').on('click', function(ev) {
+            var _ev = $(ev.target),
+                attr = _ev.attr('data-attr'),
+                $input = $('.value input'),
+                $minus = $('.minus');
+            if (attr == 'plus') {
+                $input.val(parseInt($input.val()) + 1);
+                $('.minus').removeClass('disabled')
+            } else if (attr == 'minus' && $input.val() > 0) {
+                var value = parseInt($input.val()) - 1;
+                $input.val(value);
+                if (value == 0)
+                    $('.minus').addClass('disabled');
+            }
+        });
+
+
+        function addToPanierProductDetail(id,quantite,taille,valeur){
+            if(quantite == null){
+                quantite = document.getElementById("quantite").value;
+            }
+            $.ajax({
+                type: 'get',
+                url: '/addpanier/?idArticle='+id+'&quantite='+quantite+"&color="+colorSelected+"&taille="+taille+"&valeur="+valeur,
+                success: function(data){
+                    if(data.response=="OK"){
+                        var nbr = parseInt(document.getElementById("nbrP").innerHTML) + 1;
+                        document.getElementById("nbrP").innerHTML = nbr;
+                        messagePanier("Produiit ajouté au panier");
+                        setTimeout(function(){ window.location.reload() ;} , 1000);
+                    }else if(data.response=="EXIST"){
+                        messagePanier("Cet produit est déjà  dans le  panier");
+                    }
+                    else if(data.response == "QUANTITY"){
+                        messagePanier("Quantité incorrect !");
+                    }
+                    else if(data.response == "epuise"){
+                        messagePanier("Quantité non disponible  !");
+                    }
+                }
+            });
+        }
+
+    </script>
+{% endblock js %}

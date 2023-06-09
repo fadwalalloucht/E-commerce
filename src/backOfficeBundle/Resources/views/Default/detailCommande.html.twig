@@ -1,0 +1,230 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+    DETAIL COMMANDE
+{% endblock title %}
+{% block style %}
+
+{% endblock style %}
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Détail commande</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">Détail commande</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Commande N°: #{{ commande.id }}{{ commande.dateCommande|date('Y-m-d')|replace({'-':''}) }}</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <!-- form start -->
+                                <table border="0" width="95%" align="center">
+                                    <tr>
+                                        <td align="right"><a class="btn btn-danger" onclick="deleteOne({{ commande.id }})">Supprimer la commande</a></td>
+                                    </tr>
+                                </table>
+                                <br><br>
+                                <div id="infosBox" style="border:1px solid #c0c0c0;border-radius: 4px;">
+                                    <table border="0" width="99%" align="center">
+                                        <tr>
+                                            <td><b>Nom :</b> {{ membre.nom }}</td>
+                                            <td><b>Mobile :</b> {{ membre.mobile }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Prenom :</b> {{ membre.prenom }}</td>
+                                            <td><b>Fix :</b> {{ membre.tel }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Adresse :</b> {{ membre.adresse }}</td>
+                                            <td><b>Email :</b> {{ membre.email }}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <br>
+                                <table border="0" width="99%" align="center">
+                                    <tr style="color: #ffffff;background-color: #0B615E;cursor: default;">
+                                        <td style="border-bottom:1px solid #000000 ;" align="center" height="30px;">Article</td>
+                                        <td style="border-bottom:1px solid #000000 ;" align="center">Titre</td>
+                                        <td style="border-bottom:1px solid #000000 ;" align="center">Unité/Valeur</td>
+                                        <td style="border-bottom:1px solid #000000 ;" align="center">Quantité</td>
+                                        <td style="border-bottom:1px solid #000000 ;" align="center">Couleur</td>
+                                        <td style="border-bottom:1px solid #000000 ;" align="center">Prix</td>
+                                        <td style="border-bottom:1px solid #000000 ;" align="center">Prix promotion</td>
+                                        <td style="border-bottom:1px solid #000000 ;" align="center">Promotion</td>
+                                        <td style="border-bottom:1px solid #000000 ;" align="center">Prix à payer</td>
+                                    </tr>
+                                    {% for d in detail %}
+                                        {% if d["article"]!="" %}
+                                        <tr>
+                                            <td height="30px;" style="border-bottom:1px solid #000000 ;" align="center"><img src="{{ d["image"] }}" width="100px" border="1px"> </td>
+                                            <td style="border-bottom:1px solid #000000 ;" align="center">{{ d["article"].titre }}</td>
+                                            <td style="border-bottom:1px solid #000000 ;" align="center">{{ d["article1"].titleTaille }} {{ d["article1"].valeurTaille }}</td>
+                                            <td style="border-bottom:1px solid #000000 ;" align="center">{{ d["quantite"] }}</td>
+                                            <td style="border-bottom:1px solid #000000 ;" align="center">
+                                                {% if d["color"] != "" %}
+                                                    <span style="width: 20px;height: 20px;display: block;background: {{ d["color"] }};border: 0.5px solid grey;"></span>
+                                                {% else %}
+                                                    --
+                                                {% endif %}
+                                            </td>
+
+                                            <td style="border-bottom:1px solid #000000 ;" align="center">{{ d["article1"].prix }} DH</td>
+                                            {% if d["promo"] != "" %}
+                                                <td style="border-bottom:1px solid #000000 ;" align="center">{{ d["article1"].Newprix }} DH</td>
+                                            {% else %}
+                                                <td style="border-bottom:1px solid #000000 ;" align="center"> --</td>
+                                            {% endif %}
+                                            <td style="border-bottom:1px solid #000000 ;" align="center">
+                                                {% if d["promo"] != "" %}
+                                                    <i class="fa fa-check" style="color: green;"></i>
+                                                {% else %}
+                                                    <i class="fa fa-times" style="color: red;"></i>
+                                                {% endif %}
+                                            </td>
+                                            <td style="border-bottom:1px solid #000000 ;" align="center">
+                                                {% if d["promo"] != "" %}
+                                                    {{ d["promo"]*d["quantite"] }} DH
+                                                {% else %}
+                                                    {{ d["article1"].prix*d["quantite"] }} DH
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% else %}
+                                            <tr>
+                                                <td height="30px;" style="border-bottom:1px solid #000000 ;" align="center"><img src="{{ d["image"] }}" width="100px" border="1px"> </td>
+                                                <td style="border-bottom:1px solid #000000 ;" align="center">{{ d["titre"] }}</td>
+                                                <td style="border-bottom:1px solid #000000 ;" align="center">{{ d["titleTaille"] }} {{ d["valeurTaille"] }}</td>
+                                                <td style="border-bottom:1px solid #000000 ;" align="center">{{ d["quantite"] }}</td>
+                                                <td style="border-bottom:1px solid #000000 ;" align="center">
+                                                    {% if d["color"] != "" %}
+                                                        <span style="width: 20px;height: 20px;display: block;background: {{ d["color"] }};border: 0.5px solid grey;"></span>
+                                                    {% else %}
+                                                        --
+                                                    {% endif %}
+                                                </td>
+
+                                                <td style="border-bottom:1px solid #000000 ;" align="center"></td>
+                                                <td style="border-bottom:1px solid #000000 ;" align="center"></td>
+                                                <td style="border-bottom:1px solid #000000 ;" align="center"></td>
+                                                <td style="border-bottom:1px solid #000000 ;" align="center">{{ d["prix"] }} DH</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <tr>
+                                        <td align="right" colspan="7" style="border-bottom:1px solid #000000 ;"><b>Total TTC : </b></td>
+                                        <td style="border-bottom:1px solid #000000 ;" align="center">{{ commande.total }} DH</td>
+                                    </tr>
+                                </table>
+                                <br>
+                                <form method="POST">
+                                    <table border="0" width="99%" align="center">
+                                        <tr>
+                                            <td width="60%"><input type="checkbox" value="1" name="validation" {% if commande.validation == 1 %}checked{% endif %}> Commande validée par telephone</td>
+                                            <td align="right"><input type="submit" value="Enregistrer" class="btn btn-primary"></td>
+                                        </tr>
+                                    </table>
+                                </form>
+
+                                <!-- form end -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </section>
+    </div>
+
+
+{% endblock body %}
+
+{% block js %}
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/noty/packaged/jquery.noty.packaged.min.js') }}"></script>
+
+    <script type="text/javascript">
+
+        function errorupload(message) {
+            noty({
+                text: message,
+                type: 'error',
+                theme: 'relax',
+                layout: 'topCenter',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+            });
+        }
+
+        function deleteOne(idR) {
+
+            noty({
+                text: 'Etes vous sûr de vouloir supprimer la commande ?',
+                type: 'confirm',
+                theme: 'relax',
+                layout: 'center',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                },
+                buttons     : [
+                    {addClass: 'btn btn-primary', text: 'Oui', onClick: function ($noty) {
+                            var url = '/deletecommande/?id='+idR;
+                            $(".fadeMe").css("visibility","visible").animate({opacity: 0.7}, 200);
+                            $.ajax({
+                                type: 'get',
+                                url: url,
+                                success: function(data){
+                                    if(data.response=="OK"){
+                                        window.location = "/list-commandes/";
+                                    }
+                                    else{
+                                        errorupload("Une erreur s'est produite");
+                                        $('.fadeMe').animate({opacity: 0.0}, 900,setInvisible);
+                                    }
+
+
+                                }
+                            });
+
+                            $noty.close();
+
+
+                        }
+                    },
+                    {addClass: 'btn btn-danger', text: 'Non', onClick: function ($noty) {
+                            $noty.close();
+
+                        }
+                    }
+                ]
+            });
+        }
+
+    </script>
+{% endblock js %}

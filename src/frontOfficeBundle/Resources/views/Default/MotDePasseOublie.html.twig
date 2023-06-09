@@ -1,0 +1,124 @@
+{% extends "@frontOffice/base1.html.twig" %}
+{% block title %}
+    MOT DE PASSE OUBLIE
+{% endblock title %}
+{% block body %}
+    <div class="hero-wrap hero-bread" style="background-image: url({{ asset('Bundle/assets/images/17.jpg') }});">
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-9 ftco-animate text-center">
+                    <h1 class="mb-0 bread">Mot de passe oublié ?</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-10 ftco-animate">
+                    <form method="post" class="billing-form">
+                        <input type="hidden" name="formName" value="connect">
+                        <h3 class="mb-4 billing-heading">
+                            <p>Vous avez oublié votre mot de passe ?</p>
+                            <p>
+                                Saisissez l'adresse email avec laquelle vous avez créé votre compte Afin de recevoir un lien de réinitialisation.
+                            </p>
+                        </h3>
+                        <div class="row align-items-end">
+                            <div class="col-md-12">
+                                {% if response is defined and response!=""%}
+                                    <div class="alert alert-danger">
+                                        <center>{{response}}</center>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="firstname">Email</label>
+                                    <input type="text" class="form-control" name="email" value="">
+                                </div>
+                            </div>
+                            <div class="w-100"></div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-primary py-3 px-4 btn-block" value="Valider" />
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-10">
+                                        <a href="/auth/" class="ForgetPwd"><i class="fa fa-dot-circle-o"></i> Se connecter</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form><!-- END -->
+                </div> <!-- .col-md-8 -->
+            </div>
+        </div>
+    </section> <!-- .section -->
+
+{% endblock body %}
+{% block js %}
+    <script type="text/javascript">
+        var response= "{{ response }}";
+        if(response != ""){
+            if(response == "NO"){
+                error("Email ou mot de passe incorrect");
+            }
+            else if(response == "NO1"){
+                error("Adresse email non valide");
+            }
+            else if(response == "NO2"){
+                error("Cet utilisateur ne figure pas dans notre base de données");
+            }
+            else if(response == "NO3"){
+                error("Une erreur s'est produite");
+            }
+            else if(response == "OK"){
+                success("Un email est envoyé à votre adresse, veuillez verifier votre boite email");
+            }
+
+        }
+        function error(message) {
+            noty({
+                text: message,
+                type: 'error',
+                theme: 'relax',
+                layout: 'bottomCenter',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+            });
+        }
+        function success(message) {
+            noty({
+                text: message,
+                type: 'success',
+                theme: 'relax',
+                layout: 'bottomCenter',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+            });
+        }
+
+        $(document).ready(function(){
+            $("#show-div-pass").click(function(){
+                $(".cd-connexion").hide(300);
+                $(".cd-connexion-2").toggle(800);
+                slideToggle
+            });
+
+
+            $("#show-retour").click(function(){
+                $(".cd-connexion-2").hide("slow");
+                $(".cd-connexion ").toggle(800);
+            });
+        });
+    </script>
+{% endblock js %}

@@ -1,0 +1,154 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+NEWSLETTER
+{% endblock title %}
+{% block style %}
+
+{% endblock style %}
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Newsletters</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">Newsletters</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">La liste des Abonnés</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <!-- form start -->
+                                <div class="table-responsive">
+                                    <form class="formMS">
+                                        <table class="table table-bordered table-hover table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>email</th>
+                                                <th><label><input type="checkbox" id="select_all" value="" /> Tout sélectionner</label></th>
+                                                <th><button id="copyButton" class="btn btn-primary">Copier la selection</button>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for p in newsletter %}
+                                                <tr>
+                                                    <td >{{ p.email }}</td>
+                                                    <td><input type="checkbox" value="{{ p.email }}" class="chk"></td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        <textarea class="YYY" style="opacity:0;" id="copyTarget" name="user_chosen_group_tag"  rows="3" class="inputbox textarea "></textarea>
+                                    </form>
+                                </div>
+                                <!-- form end -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </section>
+    </div>
+{% endblock body %}
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            /* selected file */
+            $('#select_all').change(function() {
+                var checkboxes = $(this).closest('form').find(':checkbox');
+                if($(this).is(':checked')) {
+                    checkboxes.prop('checked', true);
+                } else {
+                    checkboxes.prop('checked', false);
+                }
+            });
+            $('input[type="checkbox"]').change(function(){
+                $('.YYY')
+                    .val($('input[type="checkbox"]:checked')
+                        .map(function(){
+                            return this.value;
+                        }).get().join(', '));
+            }).change();
+        });
+
+        document.getElementById("copyButton").addEventListener("click", function() {
+            copyToClipboard(document.getElementById("copyTarget"));
+        });
+
+        function copyToClipboard(elem) {
+            // create hidden text element, if it doesn't already exist
+            var targetId = "_hiddenCopyText_";
+            var isInput = elem.tagName === "checkbox" || elem.tagName === "TEXTAREA";
+            var origSelectionStart, origSelectionEnd;
+            if (isInput) {
+                // can just use the original source element for the selection and copy
+                target = elem;
+                origSelectionStart = elem.selectionStart;
+                origSelectionEnd = elem.selectionEnd;
+            } else {
+                // must use a temporary form element for the selection and copy
+                target = document.getElementById(targetId);
+                if (!target) {
+                    var target = document.createElement("textarea");
+                    target.style.position = "absolute";
+                    target.style.left = "-9999px";
+                    target.style.top = "0";
+                    target.id = targetId;
+                    document.body.appendChild(target);
+                }
+                target.textContent = elem.textContent;
+            }
+            // select the content
+            var currentFocus = document.activeElement;
+            target.focus();
+            target.setSelectionRange(0, target.value.length);
+
+            // copy the selection
+            var succeed;
+            try {
+                succeed = document.execCommand("copy");
+            } catch(e) {
+                succeed = false;
+            }
+            // restore original focus
+            if (currentFocus && typeof currentFocus.focus === "function") {
+                currentFocus.focus();
+            }
+
+            if (isInput) {
+                // restore prior selection
+                elem.setSelectionRange(origSelectionStart, origSelectionEnd);
+            } else {
+                // clear temporary content
+                target.textContent = "";
+            }
+            return succeed;
+        }
+
+
+
+    </script>
+{% endblock js %}

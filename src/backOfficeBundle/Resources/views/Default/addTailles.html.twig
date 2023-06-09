@@ -1,0 +1,195 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+    NOUVELLE COULEUR
+{% endblock title %}
+{% block style %}
+    <link rel="stylesheet" href="{{ asset('Bundle/ST/css/colorpicker.css') }}" type="text/css" />
+    <link rel="stylesheet" media="screen" type="text/css" href="{{ asset('Bundle/ST/css/layout.css') }}" />
+{% endblock style %}
+
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Nouvelle taille</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">Nouvelle taille</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Nouvelle taille</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <!-- form start -->
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div id="notif">
+                                                    {% if response != "" %}
+                                                        {% if response == "OK" %}
+                                                            <div class="alert alert-success" role="alert">
+                                                                Taille ajouté
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="alert alert-danger" role="alert">
+                                                                {{response}}
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </div>
+                                                <form method="post" id="addColor">
+                                                    <div class="modal-body" >
+                                                        <div class="form-group">
+                                                            <label>Titre</label>
+                                                            <input type="text"  name="Ttitle" id="titre" style="width: 100%;">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="submit" id="submit" class="btn btn-primary">Enregistrer</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!-- /.col-lg-12 (nested) -->
+                                        </div>
+                                        <!-- /.row (nested) -->
+                                    </div>
+                                    <div class="card card-primary">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Liste taille</h3>
+                                        </div>
+                                        <!-- /.card-header -->
+                                        <div class="card-body">
+                                            <!-- form start -->
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-hover table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Titre</th>
+                                                        <th></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for t in Tailles %}
+                                                        <tr>
+                                                            <td>{{ t.TitleTaille }}</td>
+                                                            <td><center><a class="btn btn-danger" onclick="deleteTaille({{ t.id }})"><i class="fa fa-trash"></i></a></center></td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <!-- form end -->
+                                        </div>
+                                    </div>
+                                    <!-- /.panel-body -->
+                                </div>
+
+                                <!-- form end -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </section>
+    </div>
+
+
+{% endblock body %}
+{% block js %}
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/noty/packaged/jquery.noty.packaged.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/jquery.popupoverlay.js') }}"></script>
+    <!--  <script type="text/javascript" src="{{ asset('/Bundle/ST/js/jscolor.min.js') }}"></script>-->
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/colorpicker.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/layout.js?ver=1.0.2') }}"></script>
+    <script type="text/javascript">
+
+
+        function deleteTaille(id){
+            noty({
+                text: 'Etes vous sûr de vouloir supprimer la taille ? ',
+                type: 'confirm',
+                theme: 'relax',
+                layout: 'center',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                },
+                buttons     : [
+                    {addClass: 'btn btn-primary', text: 'Oui', onClick: function ($noty) {
+                            loaderChangePage();
+                            $(".fadeMe").css("visibility","visible");
+                            var url = '/deleteTaille/?id='+id;
+                            $.ajax({
+                                type: 'get',
+                                url: url,
+                                success: function(data){
+                                    if(data.response=="OK"){
+                                        window.location = "/addTailles/";
+                                    }
+                                    else{
+                                        messageUpdate("Cette taille est lié a un produit deja existe  !","error");
+                                        $("#progress").addClass("done");
+                                        $(".fadeMe").css("visibility","hidden");
+                                    }
+                                }
+                            });
+
+                            $noty.close();
+
+                        }
+                    },
+                    {addClass: 'btn btn-danger', text: 'Non', onClick: function ($noty) {
+                            $noty.close();
+
+                        }
+                    }
+                ]
+            });
+        }
+
+        function messageUpdate(message,typeMessage) {
+            noty({
+                text: message,
+                type: typeMessage,
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 3000,
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+        }
+
+
+    </script>
+{% endblock js %}

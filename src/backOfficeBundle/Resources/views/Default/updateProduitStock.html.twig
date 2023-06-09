@@ -1,0 +1,346 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+    MODIFIER PRODUIT DE STOCK
+{% endblock title %}
+{% block style %}
+    <link rel="stylesheet" href="{{ asset('Bundle/ST/css/dropzone.css') }}">
+
+
+{% endblock style %}
+{% block body %}
+
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Modification De Produit</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">Modifier Produit De stock </li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12" style="padding-left: 0%;">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Modifier Produit De Stock </h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body" style="padding-inline: 0.6%;">
+                                <!-- form start -->
+                                <form role="form" id="FormAdd" enctype="multipart/form-data">
+
+                                    <div class="form-group">
+                                        <label>Catégorie :</label>
+                                        <select  class="form-control" name="categorieM" id="categorie" onchange="getSousCategories()" style="height: 45px; width: 99%;">
+                                            {% for c in categorie %}
+                                                <option value="{{ c.id }}" {% if c.id == souscategorie.idCategorie %}selected{% endif %}>{{ c.nom }}</option>
+                                            {% endfor %}
+                                        </select>
+
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Sous Catégorie :</label>
+                                        <div id="sousC">
+                                            <select class="form-control" id="cat" name="souscategorie" >
+
+                                                <option value="{{ souscategorie.id }}" >{{ souscategorie.nom }}</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Titre :</label>
+                                        <input type="text" class="form-control" name="titre" id="titre" value="{{ produit.titre }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span> <label>	Prix HT :</label>
+                                        <input type="number" min="0" class="form-control" name="ht" id="ht" value="{{ produit.prixht}}" onkeyup="calcultt()">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span> <label>	Prix TVA :</label>
+                                        <input type="number" min="0" class="form-control" name="tva" id="tva" onkeyup="calcultt()" value="{{ produit.prixtva}}" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>	Prix TTC :</label>
+                                        <input type="number"  min="0" class="form-control" name="ttc" id="ttc" readonly value="{{ produit.prixttc}}" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>  <label>Quantite :</label>
+                                        <input type="number" min="0" class="form-control" name="qnt" id="qte" value="{{ produit.qte}}" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Description :</label>
+                                        <textarea class="form-control cleditor" rows="3" name="description" id="desc">{{ produit.description }}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Ajouter à la quantité actuelle :</label>
+                                        <input type="number" class="form-control" id="addQte" value=0 onchange="addToQte()">
+
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label>Pièce de joint :</label>
+                                        <input type="file" name="fichier">
+                                    </div>
+
+
+
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading" style="text-align: center;
+    background-color: #007bff;">
+                                                    <strong style="">Image De Produit :</strong>
+                                                </div>    <br>
+                                                <div class="panel-body">
+                                                    <div class="row">
+
+                                                        <div class="col-lg-3">
+                                                            <div class="container-i">
+                                                                <img src="{{ produit.urlfile }}" alt="" style="vertical-align:middle !important; padding-bottom: 10px; width: 60%">
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div style="text-align: center;">
+                                        <button type="submit" class="btn btn-success" id="submit">Enregistrer</button>
+
+                                    </div>
+                                </form>
+                                <div id="response" style="margin-top: 10px;">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Liste Des Produits</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Produit De Matier Premier</th>
+                            <th>Quantité</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for p in produits %}
+                            <tr>
+                                <td>{{p["produitmp"].titre}}</td>
+                                <td>{{p["produit"].Qte}}</td>
+                            </tr>
+
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock body %}
+{% block js %}
+    <script src="{{ asset('Bundle/ST/js/dropzone.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/facture.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/noty/packaged/jquery.noty.packaged.min.js') }}"></script>
+    <script type="text/javascript">
+
+        function deleteImage(id){
+            noty({
+                text: 'Etes vous sûr de vouloir supprimer l\'image ?',
+                type: 'confirm',
+                theme: 'relax',
+                layout: 'center',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                },
+                buttons     : [
+                    {addClass: 'btn btn-primary', text: 'Oui', onClick: function ($noty) {
+                            var url = '/delete-image/?id='+id;
+                            $(".fadeMe").css("visibility","visible").animate({opacity: 0.7}, 200);
+                            $.ajax({
+                                type: 'get',
+                                url: url,
+                                success: function(data){
+                                    if(data.response=="OK"){
+                                        location.reload(true);
+
+                                    }
+                                    else{
+                                        errorResponse("Une erreur s'est produite","error");
+                                        $('.fadeMe').animate({opacity: 0.0}, 900,setInvisible);
+                                    }
+
+
+                                }
+                            });
+
+                            $noty.close();
+
+
+                        }
+                    },
+                    {addClass: 'btn btn-danger', text: 'Non', onClick: function ($noty) {
+                            $noty.close();
+
+                        }
+                    }
+                ]
+            });
+        }
+
+
+        function calcultt(){
+            //alert("ghfhfhg");
+            // var HT
+            var ht = Number(document.getElementById("ht").value);
+            // var Ttc
+            var ttc = Number(document.getElementById("ttc").value);
+            // var tva
+            var tva = Number(document.getElementById("tva").value);
+
+            console.log(ht,tva);
+            //calculer la valeur de ttc
+
+            ttc=ht+(ht*tva/100);
+
+            document.getElementById("ttc").value = Math.round(ttc * 100) / 100 ;
+        }
+
+
+        $(document).ready(function () {
+            $("#desc").cleditor()[0].focus();
+
+        });
+
+        function calculPrix(){
+            var ht = parseInt(document.getElementById("ht").value);
+            var tva = document.getElementById("tva").value;
+            if(tva != "" && ht != ""){
+                var pttc = parseInt(ht+(ht*(tva/100)));
+                document.getElementById("ttc").value = pttc;
+            }
+        }
+
+        $("#FormAdd").on('submit', function(e){
+            e.preventDefault();
+            var selectBox = document.getElementById("cat");
+            var sc = selectBox.options[selectBox.selectedIndex].value;
+            // AJAX Code To Submit Form.
+            var id = {{ produit.id }};
+            $.ajax({
+                type: "POST",
+                url: "/update-product-db/?id="+id+"&sc="+sc,
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData:false,
+                success: function(data){
+                    var resp = data.response.split("-");
+                    if(resp[0] != "OK"){
+                        var response = '<div class="alert alert-danger alert-dismissable">'
+                            + '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'
+                            + data.response
+                            + '</div>';
+                        document.getElementById("response").innerHTML = response;
+                    }
+                    else{
+                        if(resp[1] != 0){
+                            window.location = "/list-ProduitStock-site/?id="+resp[1];
+                        }
+                        $("#FormAdd")[0].reset();
+                        var response = '<div class="alert alert-success alert-dismissable">'
+                            + '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'
+                            + 'Produit ajouté avec succès'
+                            + '</div>';
+                        document.getElementById("response").innerHTML = response;
+                    }
+                }
+            });
+            return false;
+        });
+
+
+        function getSousCategories(){
+            var selectBox = document.getElementById("categorie");
+            var id = selectBox.options[selectBox.selectedIndex].value;
+            if(id != "--"){
+                var url = "/getsouscategorie/?id="+id;
+                $.ajax({
+                    type: 'get',
+                    url: url,
+                    success: function(data){
+                        if(data.response!=null){
+                            var element = document.getElementById("sousC");
+                            var sous = '<select class="form-control"  id="cat" name="souscategorie" >';
+                            for(var i=0;i<data.response.length;i++){
+                                sous = sous+'<option value='+data.response[i]["id"];
+                                if(data.response[i]["id"] == {{ souscategorie.id }}){
+                                    sous = sous+" selected";
+                                }
+                                sous = sous+'>'+data.response[i]["nom"]+'</option>';
+                            }
+                            sous = sous+'</select>';
+                            element.innerHTML = sous;
+
+                        }
+                        else{
+                            errorupload("Une erreur s'est produite");
+
+                        }
+
+
+                    }
+                });
+            }
+        }
+
+        function addToQte(){
+            var qte = {{ produit.qte }};
+            var old = qte;
+            var add = parseInt(document.getElementById("addQte").value);
+            if(isNaN(add) == false){
+                var newQte = old+add;
+                document.getElementById("qte").value = newQte;
+            }
+        }
+    </script>
+
+
+
+{% endblock js %}

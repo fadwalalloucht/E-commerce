@@ -1,0 +1,175 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+    SITE WEB
+{% endblock title %}
+{% block style %}
+    <link rel="stylesheet" href="{{ asset('Bundle/ST/css/colorpicker.css') }}" type="text/css" />
+    <link rel="stylesheet" media="screen" type="text/css" href="{{ asset('Bundle/ST/css/layout.css') }}" />
+{% endblock style %}
+
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Site web</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">Site web</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- Main content -->
+        <form method="post" id="addColor">
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- left column -->
+                        <div class="col-md-12">
+                            {% if response != "" %}
+                                {% if response == "OK" %}
+                                    <div class="alert alert-success" role="alert">
+                                        Modification enregistrée
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-danger" role="alert">
+                                        {{response}}
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">Block 1</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <!-- form start -->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div id="notif">
+
+                                                    </div>
+                                                    <div class="modal-body" >
+                                                        <div class="form-group row">
+                                                            <label class="col-md-2">Titre</label>
+                                                            <div class="col-md-4">
+                                                                <input type="text"  name="titre" class="form-control" value="{{ s.block1 }}">
+                                                            </div>
+                                                            <label class="col-md-2">Sous titre</label>
+                                                            <div class="col-md-4">
+                                                                <input type="text"  name="sTitre" class="form-control" value="{{ s.block2 }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-md-2">Text</label>
+                                                            <div class="col-md-10">
+                                                                <textarea  name="text" class="form-control" rows="3">{{ s.block3 }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /.col-lg-12 (nested) -->
+                                            </div>
+                                            <!-- /.row (nested) -->
+                                        </div>
+                                    </div>
+                                    <!-- form end -->
+                                </div>
+                            </div>
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">Block 2</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <!-- form start -->
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="modal-body" >
+                                                        <div class="form-group row">
+                                                            <label class="col-md-2">Titre principal</label>
+                                                            <div class="col-md-4">
+                                                                <input type="text"  name="titre5" class="form-control" value="{{ s.block12 }}">
+                                                            </div>
+                                                            <label class="col-md-2">Text principal</label>
+                                                            <div class="col-md-4">
+                                                                <input type="text"  name="text5" class="form-control" value="{{ s.block13 }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-md-2">Titre 1</label>
+                                                            <div class="col-md-4">
+                                                                <input type="text"  name="titre1" class="form-control" value="{{ s.block4 }}">
+                                                            </div>
+                                                            <label class="col-md-2">Text 1</label>
+                                                            <div class="col-md-4">
+                                                                <input type="text"  name="text1" class="form-control" value="{{ s.block5 }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-md-2">Titre 2</label>
+                                                            <div class="col-md-4">
+                                                                <input type="text"  name="titre2" class="form-control" value="{{ s.block6 }}">
+                                                            </div>
+                                                            <label class="col-md-2">Text 2</label>
+                                                            <div class="col-md-4">
+                                                                <input type="text"  name="text2" class="form-control" value="{{ s.block7 }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-md-2">Titre 3</label>
+                                                            <div class="col-md-4">
+                                                                <input type="text"  name="titre3" class="form-control" value="{{ s.block8 }}">
+                                                            </div>
+                                                            <label class="col-md-2">Text 3</label>
+                                                            <div class="col-md-4">
+                                                                <input type="text"  name="text3" class="form-control" value="{{ s.block9 }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label class="col-md-2">Titre 4</label>
+                                                            <div class="col-md-4">
+                                                                <input type="text"  name="titre4" class="form-control" value="{{ s.block10 }}">
+                                                            </div>
+                                                            <label class="col-md-2">Text 4</label>
+                                                            <div class="col-md-4">
+                                                                <input type="text"  name="text4" class="form-control" value="{{ s.block11 }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /.col-lg-12 (nested) -->
+                                            </div>
+                                            <!-- /.row (nested) -->
+                                        </div>
+                                    </div>
+                                    <!-- form end -->
+                                </div>
+                            </div>
+                            <button type="submit" id="submit" class="btn btn-primary">Enregistrer</button>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </section>
+        </form>
+
+    </div>
+
+
+{% endblock body %}

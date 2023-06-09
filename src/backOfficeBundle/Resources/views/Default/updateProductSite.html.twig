@@ -1,0 +1,503 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+    MODFIER PRODUIT
+{% endblock title %}
+{% block style %}
+    <link rel="stylesheet" href="{{ asset('Bundle/ST/css/dropzone.css') }}">
+
+    <style>
+        .container-i {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .container-i img {
+            width: 100%;
+            height: 220px;
+
+        }
+
+        .container-i .btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            background-color: #555;
+            color: white;
+            font-size: 16px;
+            padding: 12px 24px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .container-i .btn:hover {
+            background-color: red;
+        }
+    </style>
+{% endblock style %}
+
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Produits</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">Produits</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Modification produit 1/2</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <!-- form start -->
+                                <form role="form" id="FormAdd">
+
+                                    <div class="form-group">
+                                        <label>Catégorie :</label>
+                                        <select  class="form-control" name="categorieM" id="categorie" onchange="getSousCategories()" style="height: 45px; width: 99%;">
+                                            {% for c in categorie %}
+                                                <option value="{{ c.id }}" {% if c.id == souscategorie.idCategorie %}selected{% endif %}>{{ c.nom }}</option>
+                                            {% endfor %}
+                                        </select>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Sous Catégorie :</label>
+                                        <div id="sousC">
+                                            <select class="form-control" id="souscat" name="souscategorie">
+
+                                                {% for c in souscategories %}
+                                                    <option value="{{ c.id }}" {% if c.id == souscategorie.id %}selected{% endif %}>{{ c.nom }}</option>
+                                                {% endfor %}
+
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="display: none">
+                                        <label>Sous Sous Catégorie :</label>
+                                        <div id="sousSC">
+                                            <select class="form-control" id="soussouscat" name="soussouscategorie" >
+
+                                                <option value="--">Sous Sous Categorie</option><option value="--">----------</option>
+                                                {% for c in soussouscategories %}
+                                                    <option value="{{ c.id }}" {% if soussouscategorie.id is defined and c.id == soussouscategorie.id %}selected{% endif %}>{{ c.nom }}</option>
+                                                {% endfor %}
+
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Titre :</label>
+                                        <input type="text" class="form-control" name="titre" id="titre" value="{{ produit.titre }}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Description :</label>
+                                        <textarea class="form-control cleditor" rows="3" name="description" id="desc">{{ produit.description }}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="radio">
+                                            <label><input type="radio" name="disp" value="oui" {% if produit.disp == 1 %} checked=""{% endif %} >Disponible</label>
+                                        </div>
+                                        <div class="radio">
+                                            <label><input type="radio" name="disp" value="non" {% if produit.disp == 0 %} checked=""{% endif %} >Sur commande</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Couleurs</label>
+                                        <select multiple class="form-control" name="colors[]">
+                                            <option value="0">Pas de couleur</option>
+                                            {% for c in colors %}
+                                                {% set ifExist = 0 %}
+                                                {% set checked = "" %}
+                                                {% for cp in colorProduct if ifExist == 0 %}
+                                                    {% if c.title == cp.title %}
+                                                        {% set checked = "selected" %}
+                                                        {% set ifExist = 1 %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                                <option value="{{ c.id }}" {{ checked }}>{{ c.title }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <button type="submit" class="btn btn-success" id="submit">Enregistrer</button>
+
+                                    </div>
+                                </form>
+                                <div id="response" style="margin-top: 10px;">
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                Images produit
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="row">
+
+                                                        {%  for i in images %}
+                                                            <div class="col-lg-3">
+                                                            <div class="container-i">
+                                                                <img src="{{ i.urlImgMin }}" alt="" style="vertical-align:middle !important; padding-bottom: 10px;">
+                                                                <button class="btn" onclick="deleteImage({{ i.id }});">Supprimer</button>
+                                                            </div>
+                                                            </div>
+                                                        {% endfor %}
+
+                                                    <!-- /.col-lg-12 (nested) -->
+                                                </div>
+                                                <!-- /.row (nested) -->
+                                            </div>
+                                            <!-- /.panel-body -->
+                                        </div>
+                                        <!-- /.panel -->
+                                    </div>
+                                    <!-- /.col-lg-12 -->
+                                </div>
+                                <!-- /.row -->
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                Nouvelles images
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <form action="/file-upload/?id={{ produit.id }}" class="dropzone MyDropzone" id="MyDropzone" style="overflow: auto;margin-bottom: 5px;">
+                                                            <div class="fallback">
+                                                                <input name="file" type="file" multiple />
+                                                            </div>
+                                                            <div class="dz-error-mark"><span>Pour ajouter une image, cliquez sur la zone grise ou glissez simplement l'image </span><br/></div>
+                                                        </form>
+                                                    </div>
+                                                    <!-- /.col-lg-12 (nested) -->
+                                                </div>
+                                                <!-- /.row (nested) -->
+                                            </div>
+                                            <!-- /.panel-body -->
+                                        </div>
+                                        <!-- /.panel -->
+                                    </div>
+                                    <!-- /.col-lg-12 -->
+                                </div>
+                                <!-- /.row -->
+                                <!-- form end -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </section>
+    </div>
+
+
+{% endblock body %}
+
+{% block js %}
+    <script src="{{ asset('Bundle/ST/js/dropzone.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/noty/packaged/jquery.noty.packaged.min.js') }}"></script>
+
+    <script type="text/javascript">
+
+
+
+
+        $(document).ready(function () {
+            $("#desc").cleditor()[0].focus();
+
+        });
+
+        function addToSite(){
+            $("#prixSite").toggle();
+        }
+
+        function calculPrix(){
+            var ht = parseInt(document.getElementById("ht").value);
+            var tva = document.getElementById("tva").value;
+            if(tva != "" && ht != ""){
+                var pttc = parseInt(ht+(ht*(tva/100)));
+                document.getElementById("ttc").value = pttc;
+            }
+        }
+        //FormAdd
+        /*
+        $("#submit").click(function(){
+            var categorie = $("#cat").val();
+            var titre = $("#titre").val();
+            var description = $("#desc").val().replace("&","&amp;");
+            var prixSite = $("#prixSiteVal").val();
+            var prixPromotion = $("#prixPromotionVal").val();
+            var marque = $("#marque").val();
+            var video = $("#video").val();
+            var disp = $("input[name=disp]:checked").val();
+            var selectBox = document.getElementById("cat");
+            var sc = selectBox.options[selectBox.selectedIndex].value;
+            // Returns successful data submission message when the entered information is stored in database.
+            var dataString = 'categorie='+ categorie + '&marque='+ marque + '&video='+ video +'&titre='+ titre + '&description='+ description +"&prixSite="+prixSite+"&prixPromotion="+prixPromotion+"&disp="+disp;
+            // AJAX Code To Submit Form.
+            var id = {{ produit.id }};
+            $.ajax({
+                type: "POST",
+                url: "/update-product-db-site/?id="+id+"&sc="+sc,
+                data: dataString,
+                cache: false,
+
+                success: function(data){
+                    if(data.response != "OK"){
+                        var response = '<div class="alert alert-danger alert-dismissable">'
+                                + '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'
+                                + data.response
+                                + '</div>';
+                        document.getElementById("response").innerHTML = response;
+                    }
+                    else{
+                        //$("#FormAdd")[0].reset();
+                        var response = '<div class="alert alert-success alert-dismissable">'
+                                + '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'
+                                + 'Produit modifié avec succès'
+                                + '</div>';
+                        document.getElementById("response").innerHTML = response;
+                    }
+                }
+            });
+            return false;
+        });
+        */
+        $("#FormAdd").submit(function(){
+            
+            $(".fadeMe").css("visibility","visible");
+
+            var disp = $("input[name=disp]:checked").val();
+            var selectBox = document.getElementById("souscat");
+            var sc = selectBox.options[selectBox.selectedIndex].value;
+
+            //----sous sous categorie
+
+            var selectBoxe = document.getElementById("soussouscat");
+            var ssc = selectBoxe.options[selectBoxe.selectedIndex].value;
+
+            // alert(ssc);
+
+            // AJAX Code To Submit Form.
+            var id = {{ produit.id }};
+            event.preventDefault();
+            var formData = new FormData($(this)[0]);
+            
+            $.ajax({
+                type: "POST",
+                url: "/update-product-db-site/?id="+id+"&sc="+sc+"&ssc="+ssc,
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+
+                success: function(data){
+                    $(".fadeMe").css("visibility","hidden");
+                    if(data.response != "OK"){
+                        var response = '<div class="alert alert-danger alert-dismissable">'
+                            + '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'
+                            + data.response
+                            + '</div>';
+                        document.getElementById("response").innerHTML = response;
+                    }
+                    else{
+                        //$("#FormAdd")[0].reset();
+                        var response = '<div class="alert alert-success alert-dismissable">'
+                            + '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'
+                            + 'Produit modifié avec succès'
+                            + '</div>';
+                        document.getElementById("response").innerHTML = response;
+                        window.location='/updateProductSiteInfo/?id='+id;
+                    }
+                }
+            });
+            return false;
+        });
+
+
+        $(document).ready(function(){
+            //Dropzone.autoDiscover = false; // keep this line if you have multiple dropzones in the same page
+            $(".MyDropzone").dropzone({
+                acceptedFiles: "image/jpeg,image/png",
+                //maxFiles: 1, // Number of files at a time
+                maxFilesize: 2, //in MB
+                success: function (file,response) {
+                    $(file.previewTemplate).find('.dz-remove').attr('id', response);
+                },
+                addRemoveLinks: true,
+                removedfile: function(file) {
+                    var id = $(file.previewTemplate).find('.dz-remove').attr('id');
+
+                    $.ajax({
+                        type: 'get',
+                        url: '/delete-image/?id='+id,
+                        success: function(data){
+                            if(data.response=="OK"){
+                                var _ref; // Remove file on clicking the 'Remove file' button
+                                return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+                            }
+                        }
+                    });
+
+                }
+            });
+        });
+
+        function deleteImage(id){
+            noty({
+                text: 'Etes vous sûr de vouloir supprimer l\'image ?',
+                type: 'confirm',
+                theme: 'relax',
+                layout: 'center',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                },
+                buttons     : [
+                    {addClass: 'btn btn-primary', text: 'Oui', onClick: function ($noty) {
+                            var url = '/delete-image/?id='+id;
+                            $(".fadeMe").css("visibility","visible").animate({opacity: 0.7}, 200);
+                            $.ajax({
+                                type: 'get',
+                                url: url,
+                                success: function(data){
+                                    if(data.response=="OK"){
+                                        location.reload(true);
+                                    }
+                                    else{
+                                        errorResponse("Une erreur s'est produite","error");
+                                        $('.fadeMe').animate({opacity: 0.0}, 900,setInvisible);
+                                    }
+                                }
+                            });
+                            $noty.close();
+                        }
+                    },
+                    {addClass: 'btn btn-danger', text: 'Non', onClick: function ($noty) {
+                            $noty.close();
+                        }
+                    }
+                ]
+            });
+        }
+
+        function errorResponse(message,type) {
+            noty({
+                text: message,
+                type: type,
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 3000,
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+        }
+        function getSousCategories(){
+            $(".fadeMe").css("visibility","visible");
+            var selectBox = document.getElementById("categorie");
+            var id = selectBox.options[selectBox.selectedIndex].value;
+            if(id != "--"){
+                var url = "/getsouscategorie/?id="+id;
+                $.ajax({
+                    type: 'get',
+                    url: url,
+                    success: function(data){
+                        $(".fadeMe").css("visibility","hidden");
+                        if(data.response!=null){
+                            var element = document.getElementById("sousC");
+                            var sous = '<select  class="form-control" id="souscat" name="souscategorie" onchange="getSousSousCategorie()"><option value="--">Sous Categorie</option><option value="--">----------</option>';
+                            for(var i=0;i<data.response.length;i++){
+                                sous = sous+'<option value='+data.response[i]["id"]+'>'+data.response[i]["nom"]+'</option>';
+                            }
+                            sous = sous+'</select>';
+                            element.innerHTML = sous;
+
+                        }
+                        else{
+                            $(".fadeMe").css("visibility","hidden");
+                            errorupload("Une erreur s'est produite");
+
+                        }
+
+
+                    }
+                });
+            }
+        }
+
+       /* function getSousSousCategorie(){
+            $(".fadeMe").css("visibility","visible");
+            var selectBox = document.getElementById("souscat");
+            var id = selectBox.options[selectBox.selectedIndex].value;
+            if(id != "--"){
+                var url = "/getSousSousCategorie/?id="+id;
+                $.ajax({
+                    type: 'get',
+                    url: url,
+                    success: function(data){
+                        $(".fadeMe").css("visibility","hidden");
+                        if(data.response!=null){
+                            var element = document.getElementById("sousSC");
+                            var sous = '<select  class="form-control" id="soussouscat" name="soussouscategorie" ><option value="--">Sous Sous Categorie</option><option value="--">----------</option>';
+                            for(var i=0;i<data.response.length;i++){
+                                sous = sous+'<option value='+data.response[i]["id"]+'>'+data.response[i]["nom"]+'</option>';
+                            }
+                            sous = sous+'</select>';
+                            element.innerHTML = sous;
+
+                        }
+                        else{
+                            $(".fadeMe").css("visibility","hidden");
+                            errorupload("Une erreur s'est produite");
+
+                        }
+
+
+                    }
+                });
+            }
+        }*/
+    </script>
+{% endblock js %}

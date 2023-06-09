@@ -1,0 +1,217 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+    MODIFIER PRODUIT MATIER PREMIER
+{% endblock title %}
+{% block style %}
+
+{% endblock style %}
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Modifier Produit De Matier Premier</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">Modifier Produit De Matier Premier</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">modifier Produit de Matier Premier</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <!-- form start -->
+                                <form role="form" id="FormAdd" method="post" enctype="multipart/form-data" >
+                                    <div class="form-group row">
+                                        {% if produitpm is defined %}
+
+
+                                        <label>Catégorie:</label>
+                                        <select name="four" class="form-control col-md-12" >
+                                            {% for c in categorie %}
+                                                <option value="{{c.id}}" {% if produitpm.idCategorie == c.id %} selected {% endif %}>{{c.nom}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Titre :</label>
+                                        <input type="text" class="form-control" name="titre" value="{{produitpm.titre}}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span> <label>	Prix HT :</label>
+                                        <input type="number" min="0" class="form-control" name="ht" id="ht1" value="{{produitpm.prixHt}}" onkeyup="calcul1()">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span> <label>	Prix TVA :</label>
+                                        <input type="number" min="0" class="form-control" name="tva" id="tva1" value="{{produitpm.TVA}}"   onkeyup="calcul1()">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>	Prix TTC :</label>
+                                        <input type="number"  min="0" class="form-control" name="ttc" id="ttc1"  value="{{ produitpm.prixTtc}}"readonly >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>  <label>Quantite :</label>
+                                        <input type="number" min="0" class="form-control" name="qnt" id="" value="{{produitpm.quantiter}}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>  <label>Description :</label>
+                                        <textarea class="form-control cleditor" rows="3" name="description">{{produitpm.description }}</textarea>
+                                    </div>
+
+                                            <div class="form-group">
+                                              <label>Pièce de joint :</label>
+                                                <input type="file" name="fichier">
+                                            </div>
+
+
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading" style="text-align: center;
+    background-color: #007bff;">
+                                                           <strong style="">Image De Produit :</strong>
+                                                        </div>    <br>
+                                                        <div class="panel-body">
+                                                            <div class="row">
+
+                                                                <div class="col-lg-3">
+                                                                    <div class="container-i">
+                                                                        <img src="{{ produitpm.urlfile }}" alt="" style="vertical-align:middle !important; padding-bottom: 10px; width: 60%">
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    <div style="text-align: center;">
+                                        <button type="submit" class="btn btn-success" id="submit" >Enregistrer</button>
+
+                                    </div>
+                                </form>
+                                <div id="response" style="margin-top: 10px;">
+
+                                </div>
+                                <!-- form end -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </section>
+    </div>
+
+{% endif %}
+{% endblock body %}
+{% block js %}
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/jquery.popupoverlay.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/noty/packaged/jquery.noty.packaged.min.js') }}"></script>
+    <script type="text/javascript">
+        {% if response is defined and response!="" and response!="success" %}
+        $(document).ready(function () {
+
+            noty({
+                text: "{{ response }}",
+                type: "error",
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 3000,
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+
+        });
+        {% endif %}
+        {% if response2 is defined and response2!="" and response2!="success" %}
+        $(document).ready(function () {
+
+            noty({
+                text: "{{ response2 }}",
+                type: "error",
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 3000,
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+
+        });
+        {% endif %}
+        {% if response is defined and response=="success" %}
+        $(document).ready(function () {
+
+            noty({
+                text: "Opération passer avec succés",
+                type: "success",
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 3000,
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+
+        });
+
+        {% endif %}
+    </script>
+    <script type="text/javascript">
+        function calcul1(){
+            // var HT
+            var ht = Number(document.getElementById("ht1").value);
+            // var Ttc
+            var ttc = Number(document.getElementById("ttc1").value);
+            // var tva
+            var tva = Number(document.getElementById("tva1").value);
+
+            //calculer la valeur de ttc
+
+            ttc=ht+(ht*tva/100);
+            document.getElementById('ttc1').value = ttc;
+        }
+
+    </script>
+
+
+
+{% endblock js %}

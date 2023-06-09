@@ -1,0 +1,140 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+     ENTREPRISE
+{% endblock title %}
+{% block style %}
+
+{% endblock style %}
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1> Entreprise </h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active"> Entreprise</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Les information de l'entreprise </h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <!-- form start -->
+                                <form role="form" id="FormAdd" method="post" >
+
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>  <label>Raison Sociale :</label>
+                                        <input type="text" class="form-control" name="rs" id="" value="{{entreprise.raisonsociale }}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>  <label>Adresse :</label>
+                                        <input type="text" class="form-control" name="adresse" id="" value="{{entreprise.adresse }}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>  <label>Tel :</label>
+                                        <input type="text" class="form-control" name="tel" id="" value="{{entreprise.tel }}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>  <label>Fax :</label>
+                                        <input type="text" class="form-control" name="fax" id="" value="{{entreprise.fax  }}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>  <label>Email :</label>
+                                        <input type="email" class="form-control" name="email" id="" value="{{entreprise.email }}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>  <label>Ice :</label>
+                                        <input type="text" class="form-control" name="ice" id="" value="{{entreprise.ice }}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>  <label>Capital :</label>
+                                        <input type="text" class="form-control" name="capital" id="" value="{{entreprise.capital }}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>  <label>Identifiant Fiscal :</label>
+                                        <input type="text" class="form-control" name="identifiantF" id="" value="{{entreprise.identifiantF }}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>  <label>Pattente :</label>
+                                        <input type="text" class="form-control" name="pattente" id="" value="{{entreprise.pattente  }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>  <label> Cnss :</label>
+                                        <input type="text" class="form-control" name="cnss" id="" value="{{entreprise.cnss }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>  <label> Site :</label>
+                                        <input type="text" class="form-control" name="site" id="" value="{{entreprise.site }}">
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <button type="submit" class="btn btn-success" id="submit" >Enregistrer</button>
+                                        <button type="reset" class="btn btn-danger">Annuler</button>
+                                    </div>
+                                </form>
+                                <div id="response" style="margin-top: 10px;">
+
+                                </div>
+                                <!-- form end -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </section>
+    </div>
+
+
+{% endblock body %}
+{% block js %}
+
+<script type="text/javascript">
+    {% if response is defined and response!="" and response!="success" %}
+    $(document).ready(function () {
+
+        noty({
+            text: "{{ response }}",
+            type: "error",
+            theme: 'relax',
+            layout: 'bottom',
+            timeout: 3000,
+            animation: {
+                open: 'animated flipInX',
+                close: 'animated flipOutX', // jQuery animate function property object
+                easing: 'swing', // easing
+                speed: 200 // opening & closing animation speed
+            }
+
+        });
+
+    });
+    {% endif %}
+</script>
+{% endblock js %}

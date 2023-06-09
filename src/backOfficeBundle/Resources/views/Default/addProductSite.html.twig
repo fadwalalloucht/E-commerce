@@ -1,0 +1,282 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+NOUVEAU PRODUIT
+{% endblock title %}
+{% block style %}
+
+{% endblock style %}
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Produit du site</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">Produit du site</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Nouveau produit</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <!-- form start -->
+                                <form role="form" id="FormAdd">
+
+                                    <div class="form-group">
+                                        <label>Categorie :</label>
+                                        <select  class="form-control" name="categorieM" id="categorie" onchange="getSousCategories()">
+                                            <option value="--">----------</option>
+                                            {% for c in categorie %}
+                                                <option value="{{ c.id }}">{{ c.nom }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Sous Categorie :</label>
+                                        <div id="sousC">
+                                            <select class="form-control" id="souscat"  name="souscategorie" >
+                                                <option value="--">----------</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Titre :</label>
+                                        <input type="text" class="form-control" name="titre" id="titre">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Description :</label>
+                                        <textarea class="form-control cleditor" rows="3" name="description" id="desc"></textarea>
+                                    </div>
+
+                                    <div class="radio">
+                                        <label><input type="radio" name="disp" value="oui" checked="" > Disponible</label>
+                                    </div>
+                                    <div class="radio">
+                                        <label><input type="radio" name="disp" value="non"> Sur commande</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Couleurs</label>
+                                        <select multiple class="form-control" name="colors[]">
+                                            <option value="0">Pas de couleur</option>
+                                            {% for c in colors %}
+                                                <option value="{{ c.id }}">{{ c.title }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div style="text-align: center;">
+                                        <button type="submit" class="btn btn-success" id="submit" >Enregistrer</button>
+                                        <button type="reset" class="btn btn-danger">Annuler</button>
+                                    </div>
+                                </form>
+                                <div id="response" style="margin-top: 10px;">
+
+                                </div>
+                                <!-- form end -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </section>
+    </div>
+
+
+{% endblock body %}
+
+{% block js %}
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            $("#desc").cleditor()[0].focus();
+
+        });
+
+
+        function errorupload(message) {
+
+            noty({
+                text: message,
+                type: 'error',
+                theme: 'relax',
+                layout: 'topCenter',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+            });
+        }
+        function addC(){
+            $("#Carac").toggle();
+        }
+
+        function calculPrix(){
+            var ht = parseInt(document.getElementById("ht").value);
+            var tva = document.getElementById("tva").value;
+            if(tva != "" && ht != ""){
+                var pttc = parseInt(ht+(ht*(tva/100)));
+                document.getElementById("ttc").value = pttc;
+            }
+        }
+
+        /*$("#submit").click(function(){
+            var categorie = $("#cat").val();
+            var titre = escape(decodeURIComponent($("#titre").val()));
+            var description = escape(decodeURIComponent($("#desc").val()));
+            var prixSite = $("#prixSiteVal").val();
+            var prixPromotion = $("#prixPromotionVal").val();
+            var marque = $("#marque").val();
+            var video = $("#video").val();
+            var disp = $("input[name=disp]:checked").val();
+
+            var selectBox = document.getElementById("cat");
+            var sc = selectBox.options[selectBox.selectedIndex].value;
+
+
+            // Returns successful data submission message when the entered information is stored in database.
+            var dataString = 'categorie='+ categorie + '&marque='+ marque +'&video='+ video + '&titre='+ titre + '&description='+ description +"&prixSite="+prixSite+"&prixPromotion="+prixPromotion+"&disp="+disp;
+            // AJAX Code To Submit Form.
+            $.ajax({
+                type: "POST",
+                url: "/add-product-db-site/?sc="+sc,
+                data: dataString,
+                cache: false,
+                success: function(data){
+                    var resp = data.response.split("-");
+                    if(resp[0] != "OK"){
+                        var response = '<div class="alert alert-danger alert-dismissable">'
+                                + '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'
+                                + data.response
+                                + '</div>';
+                        document.getElementById("response").innerHTML = response;
+                    }
+                    else{
+                        if(resp[1] != 0){
+                            window.location = "/add-images/?id="+resp[1];
+                        }
+                        $("#FormAdd")[0].reset();
+                        var response = '<div class="alert alert-success alert-dismissable">'
+                                + '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'
+                                + 'Produit ajouté avec succès'
+                                + '</div>';
+                        document.getElementById("response").innerHTML = response;
+                    }
+                }
+            });
+            return false;
+        });
+        */
+        $("#FormAdd").submit(function(){
+
+
+            event.preventDefault();
+            $(".fadeMe").css("visibility","visible");
+
+            var disp = $("input[name=disp]:checked").val();
+            //---sous categorie
+            var selectBox = document.getElementById("souscat");
+            var sc = selectBox.options[selectBox.selectedIndex].value;
+
+            //----sous sous categorie
+
+            /*var selectBoxe = document.getElementById("soussouscat");
+            var ssc = selectBoxe.options[selectBoxe.selectedIndex].value;*/
+
+            event.preventDefault();
+            var formData = new FormData($(this)[0]);
+            $.ajax({
+                type: "POST",
+                url: "/add-product-db-site/?sc="+sc,
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+
+                success: function(data){
+
+                    $(".fadeMe").css("visibility","hidden");
+                    var resp = data.response.split("-");
+                    if(resp[0] != "OK"){
+                        var response = '<div class="alert alert-danger alert-dismissable">'
+                            + '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'
+                            + data.response
+                            + '</div>';
+                        document.getElementById("response").innerHTML = response;
+                    }
+                    else{
+                        $(".fadeMe").css("visibility","hidden");
+                        if(resp[1] != 0){
+                            window.location = "/addInfoProduit_db/?id="+resp[1];
+                        }
+                        $("#FormAdd")[0].reset();
+                        var response = '<div class="alert alert-success alert-dismissable">'
+                            + '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'
+                            + 'Produit ajouté avec succès'
+                            + '</div>';
+                        document.getElementById("response").innerHTML = response;
+                    }
+                }
+            });
+            return false;
+        });
+
+        function getSousCategories(){
+
+            var selectBox = document.getElementById("categorie");
+            var id = selectBox.options[selectBox.selectedIndex].value;
+            if(id != "--"){
+                var url = "/getsouscategorie/?id="+id;
+                $(".fadeMe").css("visibility","visible");
+                $.ajax({
+                    type: 'get',
+                    url: url,
+                    success: function(data){
+                        $(".fadeMe").css("visibility","hidden");
+                        if(data.response!=null){
+                            var element = document.getElementById("sousC");
+                            var sous = '<select  class="form-control" id="souscat" name="souscategorie" onchange="getSousSousCategorie()"><option value="--">Sous Categorie</option><option value="--">----------</option>';
+                            for(var i=0;i<data.response.length;i++){
+                                sous = sous+'<option value='+data.response[i]["id"]+'>'+data.response[i]["nom"]+'</option>';
+                            }
+                            sous = sous+'</select>';
+                            element.innerHTML = sous;
+
+                        }
+                        else{
+                            $(".fadeMe").css("visibility","hidden");
+                            errorupload("Une erreur s'est produite");
+
+                        }
+                    }
+                });
+            }
+        }
+
+    </script>
+
+{% endblock js %}

@@ -1,0 +1,140 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+    NOUVEAU ADMINISTRATEUR
+{% endblock title %}
+{% block style %}
+
+{% endblock style %}
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Adminstrateur</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">Adminstrateur</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Nouvel administrateur</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <form role="form" id="FormAdd" method="POST">
+                                    <!-- form start -->
+                                    {% if response is defined and response!=""%}
+                                        <div class="alert alert-danger">
+                                            {{response}}
+                                        </div>
+                                    {% endif %}
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>        <label>Nom :</label>
+                                        <input type="text" class="form-control" name="nom" id="nom" value="{% if nom  is defined %}{{ nom }}{% endif %}">
+                                    </div>
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>     <label>Prenom :</label>
+                                        <input type="text" class="form-control" name="prenom" id="prenom" value="{% if prenom  is defined %}{{ prenom }}{% endif %}">
+                                    </div>
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>     <label>Email :</label>
+                                        <input type="text" class="form-control" name="email" id="email" value="{% if email  is defined %}{{ email }}{% endif %}">
+                                    </div>
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>     <label>Telephone :</label>
+                                        <input type="text" class="form-control" name="tel" id="tel" value="{% if tel  is defined %}{{ tel }}{% endif %}">
+                                    </div>
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>       <label>Adresse :</label>
+                                        <input type="text" class="form-control" name="adresse" id="adresse" value="{% if adresse  is defined %}{{ adresse }}{% endif %}">
+                                    </div>
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>      <label>Mot de passe :</label>
+                                        <input type="password" class="form-control" name="password" id="password">
+                                    </div>
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>       <label>Confirmer mot de passe :</label>
+                                        <input type="password" class="form-control" name="newpassword" id="newpassword">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>    <label>Droits d'accés :</label>
+                                        <div class="col-md-4">
+                                            <input type="checkbox" id="checkAll" name="checkAll">
+                                            <label  for="checkAll"><strong>Séléctionner tout</strong></label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row col-md-12">
+                                        <div class="col-md-6">
+                                            <table class="table table-bordered table-responsive-lg">
+                                                {% set count=(ListRole|length/2)|number_format(2) %}
+                                                {% for l in ListRole|slice(0, count) %}
+                                                    <tr>
+                                                        <td>
+                                                            <input type="checkbox" name="{{ l.code }}" id="{{ l.code }}">
+                                                            <label for="{{ l.code }}">{{ l.titre }}</label>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+
+                                            </table>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <table class="table table-bordered table-responsive-lg">
+                                                {% for l in ListRole|slice(count, ListRole|length) %}
+                                                    <tr>
+                                                        <td>
+                                                            <input type="checkbox" name="{{ l.code }}" id="{{ l.code }}">
+                                                            <label for="{{ l.code }}">{{ l.titre }}</label>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div style="text-align: center;">
+                                        <button type="submit" class="btn btn-success" id="submit">Enregistrer</button>
+                                        <button type="reset" class="btn btn-danger">Annuler</button>
+                                    </div>
+
+                                    <!-- form end -->
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </section>
+    </div>
+
+
+{% endblock body %}
+
+{% block js %}
+    <script type="text/javascript">
+        $("#checkAll").click(function(){
+            $('input:checkbox').not(this).prop('checked', this.checked);
+        });
+    </script>
+{% endblock js %}

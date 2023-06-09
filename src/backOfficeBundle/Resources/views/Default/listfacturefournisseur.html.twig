@@ -1,0 +1,181 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+    FACTURE  FOURNISSEUR
+{% endblock title %}
+{% block style %}
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{{ asset("bundles/plugins/datatables-bs4/css/dataTables.bootstrap4.css") }}">
+
+{% endblock style %}
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1> Facture Fournisseur</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active"> Facture  Fournisseur site</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title"> Facture  Fournisseur site</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <!-- form start -->
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h1 class="page-header"></h1>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <h1 class="page-header" style="text-align: right;"><a href="/add-FactureFournisseur-site/" class="btn btn-success">Ajouter Facture Fournisseur</a></h1>
+                                    </div>
+
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Liste Facture des Fournisseur</h3>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <div class="card-body">
+                                        <table id="example1" class="table table-bordered table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>Fournisseur</th>
+                                                <th>Date</th>
+                                                <th>Montant Total</th>
+                                                <th>Description</th>
+                                                <th>Action
+                                                </th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                {% for f in facutrefournisseurs %}
+
+                                                <tr>
+                                                    <td>{{f["fournisseur"]}}</td>
+                                                    <td>{{f["facture"].date|date("d-m-Y")}}</td>
+                                                    <td>{{ f["facture"].totel }}</td>
+                                                    <td>{{ f["facture"].description }}</td>
+                                                    <td>
+                                                        <a href="/update-FactureFournisseur-site/{{f["facture"].id}}/" class="btn btn-info">Modifier</a>
+                                                        <a class="btn btn-danger" onclick="deleteCharge({{f["facture"].id}})">Supprimer</a>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                                <!-- /.card -->
+                            </div>
+
+                            <!-- form end -->
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </section>
+
+    </div>
+
+{% endblock %}
+{% block js %}
+
+    <!-- DataTables -->
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/noty/packaged/jquery.noty.packaged.min.js') }}"></script>
+
+
+    <script type="text/javascript">
+
+        $("#example1").DataTable({
+            "language": {
+                "url": "/Bundle/ST/js/datatables/french-datatable.json"
+            }});
+
+        function messageUpdate(message,typeMessage) {
+            noty({
+                text: message,
+                type: typeMessage,
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 3000,
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+        }
+
+        function deleteCharge(id){
+            noty({
+                text: 'Etes vous sûr de vouloir supprimer le facture de fournisseur ?',
+                type: 'confirm',
+                theme: 'relax',
+                layout: 'center',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                },
+                buttons     : [
+                    {addClass: 'btn btn-primary', text: 'Oui', onClick: function ($noty) {
+                            loaderChangePage();
+                            $(".fadeMe").css("visibility","visible");
+                            var url = '/delete-FactureFournisseur-site/'+id+'/';
+                            $.ajax({
+                                type: 'get',
+                                url: url,
+                                success: function(data){
+                                    if(data.response=="OK"){
+                                        window.location = "/list-FactureFournisseur-site/";
+                                    }
+                                    else{
+                                        messageUpdate("Une erreur s'est produite","error");
+                                        $("#progress").addClass("done");
+                                        $(".fadeMe").css("visibility","hidden");
+                                    }
+                                }
+                            });
+
+                            $noty.close();
+                        }
+                    },
+                    {addClass: 'btn btn-danger', text: 'Non', onClick: function ($noty) {
+                            $noty.close();
+
+                        }
+                    }
+                ]
+            });
+        }
+    </script>
+
+{% endblock js %}

@@ -1,0 +1,344 @@
+<?php
+
+namespace backOfficeBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Produit_Stock
+ *
+ * @ORM\Table(name="produit__stock")
+ * @ORM\Entity(repositoryClass="backOfficeBundle\Repository\Produit_StockRepository")
+ */
+class Produit_Stock
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="titre", type="string", length=255)
+     */
+    private $titre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255)
+     */
+    private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="reference", type="string", length=255)
+     */
+    private $reference;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="prixht", type="integer")
+     */
+    private $prixht;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="prixtva", type="integer")
+     */
+    private $prixtva;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="prixttc", type="integer")
+     */
+    private $prixttc;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="Idcategorie", type="integer")
+     */
+    private $idcategorie;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateAjout", type="date")
+     */
+      private $dateAjout;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="qte", type="integer")
+     */
+
+      private $qte;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="urlfile", type="string", length=255, nullable=true)
+     */
+    private $urlfile;
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set titre
+     *
+     * @param string $titre
+     *
+     * @return Produit_Stock
+     */
+    public function setTitre($titre)
+    {
+        $this->titre = $titre;
+
+        return $this;
+    }
+
+    /**
+     * Get titre
+     *
+     * @return string
+     */
+    public function getTitre()
+    {
+        return $this->titre;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Produit_Stock
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set reference
+     *
+     * @param string $reference
+     *
+     * @return Produit_Stock
+     */
+    public function setReference($reference)
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    /**
+     * Get reference
+     *
+     * @return string
+     */
+    public function getReference()
+    {
+        return $this->reference;
+    }
+
+    /**
+     * Set prixht
+     *
+     * @param integer $prixht
+     *
+     * @return Produit_Stock
+     */
+    public function setPrixht($prixht)
+    {
+        $this->prixht = $prixht;
+
+        return $this;
+    }
+
+    /**
+     * Get prixht
+     *
+     * @return int
+     */
+    public function getPrixht()
+    {
+        return $this->prixht;
+    }
+
+    /**
+     * Set prixtva
+     *
+     * @param integer $prixtva
+     *
+     * @return Produit_Stock
+     */
+    public function setPrixtva($prixtva)
+    {
+        $this->prixtva = $prixtva;
+
+        return $this;
+    }
+
+    /**
+     * Get prixtva
+     *
+     * @return int
+     */
+    public function getPrixtva()
+    {
+        return $this->prixtva;
+    }
+
+    /**
+     * Set prixttc
+     *
+     * @param integer $prixttc
+     *
+     * @return Produit_Stock
+     */
+    public function setPrixttc($prixttc)
+    {
+        $this->prixttc = $prixttc;
+
+        return $this;
+    }
+
+    /**
+     * Get prixttc
+     *
+     * @return int
+     */
+    public function getPrixttc()
+    {
+        return $this->prixttc;
+    }
+
+    /**
+     * Set idcategorie
+     *
+     * @param integer $idcategorie
+     *
+     * @return Produit_Stock
+     */
+    public function setIdcategorie($idcategorie)
+    {
+        $this->idcategorie = $idcategorie;
+
+        return $this;
+    }
+
+    /**
+     * Get idcategorie
+     *
+     * @return int
+     */
+    public function getIdcategorie()
+    {
+        return $this->idcategorie;
+    }
+
+    /**
+     * Set dateAjout
+     *
+     * @param \DateTime $dateAjout
+     *
+     * @return Produit_Stock
+     */
+    public function setDateAjout($dateAjout)
+    {
+        $this->dateAjout = $dateAjout;
+
+        return $this;
+    }
+
+    /**
+     * Get dateAjout
+     *
+     * @return \DateTime
+     */
+    public function getDateAjout()
+    {
+        return $this->dateAjout;
+    }
+
+    /**
+     * Set qte
+     *
+     * @param integer $qte
+     *
+     * @return Produit_Stock
+     */
+    public function setQte($qte)
+    {
+        $this->qte = $qte;
+
+        return $this;
+    }
+
+    /**
+     * Get qte
+     *
+     * @return integer
+     */
+    public function getQte()
+    {
+        return $this->qte;
+    }
+
+    /**
+     * Set urlfile
+     *
+     * @param string $urlfile
+     *
+     * @return Produit_Stock
+     */
+    public function setUrlfile($urlfile)
+    {
+        $this->urlfile = $urlfile;
+
+        return $this;
+    }
+
+    /**
+     * Get urlfile
+     *
+     * @return string
+     */
+    public function getUrlfile()
+    {
+        return $this->urlfile;
+    }
+}

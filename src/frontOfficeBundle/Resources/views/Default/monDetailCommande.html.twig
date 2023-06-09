@@ -1,0 +1,131 @@
+{% extends "@frontOffice/base1.html.twig" %}
+{% block title %}
+    DETAILS COMMANDE:#{{ numCommande }}
+{% endblock title %}
+{% block body %}
+    <style>
+        .activeLi{
+            background-color: #dbcc8f;
+            text-align: center;
+        }
+        .centerText{
+            text-align: center;
+        }
+    </style>
+    <div class="hero-wrap hero-bread" style="background-image: url({{ asset('Bundle/assets/images/52.jpg') }});">
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-9 ftco-animate text-center">
+                    <h1 class="mb-0 bread">Details commande:#{{ numCommande }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="ftco-section ftco-degree-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 order-lg-last ftco-animate">
+                    <div class="row">
+                        <div class="col-md-12 d-flex ftco-animate">
+                            <div class="blog-entry align-self-stretch d-md-flex">
+                                <div class="text d-block pl-md-4">
+                                    <h3 class="heading"><a href="#">Details commande (Numero Commande:&nbsp;#{{ numCommande }})</a></h3>
+                                    <form method="post" class="billing-form">
+                                        <table id="shopping-cart-table" class="table table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>Image</th>
+                                                <th><span class="nobr">Nom du produit</span></th>
+                                                <th><span class="nobr">Taille</span></th>
+                                                <th><span class="nobr">Prix unitaire</span></th>
+                                                <th>Qté</th>
+                                                <th>Couleur</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for a in article %}
+                                                {% if a['obj']!=""  %}
+                                                    <tr>
+                                                        <td>
+                                                            <a href="/produit_detail/{{ a['obj'].titre }}/{{ a['obj'].id }}" class="product-image"><img src="{{ a['img'] }}" width="75" height="75" alt="{{ a['obj'].titre }}" /></a>
+                                                        </td>
+                                                        <td>
+                                                            <p>
+                                                                <a href="/produit_detail/{{ a['obj'].titre }}/{{ a['obj'].id }}">{{ a['obj'].titre }}</a>
+                                                            </p>
+                                                        </td>
+                                                        <td >
+                                                            <span class="cart-price"><span class="price">{{ a['taille']}}  {{ a['valeur']}}</span></span>
+                                                        </td>
+                                                        <td >
+                                                            <span class="cart-price"><span class="price">{{ a['prix']|number_format(2, '.', ',')  }} Dh</span></span>
+                                                        </td>
+                                                        <td class="a-center">
+                                                            <div class='item-size'>
+                                                                {{ a['qte'] }}
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <center>
+                                                                <span style="width: 25px;height: 25px;border-radius: 50%;background-color: {{ a["color"] }};display: block;"></span>
+                                                            </center>
+                                                        </td>
+                                                    </tr>
+                                                    {% else %}
+                                                        <tr>
+                                                            <td>
+                                                                <img src="{{ a['img'] }}" width="75" height="75" alt="{{ a['titre'] }}" />
+                                                            </td>
+                                                            <td>
+                                                                <p>
+                                                                    {{ a['titre'] }}
+                                                                </p>
+                                                            </td>
+                                                            <td >
+                                                                <span class="cart-price"><span class="price">{{ a['taille']}}  {{ a['valeur']}}</span></span>
+                                                            </td>
+                                                            <td >
+                                                                <span class="cart-price"><span class="price">{{ a['prix']|number_format(2, '.', ',')  }} Dh</span></span>
+                                                            </td>
+                                                            <td class="a-center">
+                                                                <div class='item-size'>
+                                                                    {{ a['qte'] }}
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <center>
+                                                                    <span style="width: 25px;height: 25px;border-radius: 50%;background-color: {{ a["color"] }};display: block;"></span>
+                                                                </center>
+                                                            </td>
+                                                        </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        <div class="price-content pull-right" style="padding: 10px;">
+                                            <div class="content-price-two">
+                                                <h4>TOTAL :&nbsp;<span id="total">{{ total|number_format(2, '.', ',') }} MAD</span></h4>
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- .col-md-8 -->
+                <div class="col-lg-4 sidebar ftco-animate">
+                    <div class="sidebar-box ftco-animate">
+                        <h3 class="heading">Mon compte</h3>
+                        <ul class="categories">
+                            <li class="centerText"><a href="/panier/"><i class="icon-user"></i> {{ user.prenom }} {{ user.nom }}</a></li>
+                            <li class="centerText"><a href="/panier/"><i class="icon-shopping-cart"></i> Mon Panier</a></li>
+                            <li class="activeLi"><a href="/mes-commandes/"><i class="icon-truck"></i> Mes Commandes</a></li>
+                            <li class="centerText"><a href="/deconnect/"><i class="icon-times-circle"></i> Déconnexion</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock body %}

@@ -1,0 +1,172 @@
+{% extends "@frontOffice/base1.html.twig" %}
+{% block title %}
+    MON PROFILE
+{% endblock title %}
+{% block body %}
+    <style>
+        .activeLi{
+            background-color: #dbcc8f;
+            text-align: center;
+        }
+        .centerText{
+            text-align: center;
+        }
+    </style>
+    <div class="hero-wrap hero-bread" style="background-image: url({{ asset('Bundle/assets/images/11.png') }});">
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-9 ftco-animate text-center">
+                    <h1 class="mb-0 bread">Mon compte</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="ftco-section ftco-degree-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 order-lg-last ftco-animate">
+                    <div class="row">
+                        <div class="col-md-12 d-flex ftco-animate">
+                            <div class="blog-entry align-self-stretch d-md-flex">
+                                <div class="text d-block pl-md-4">
+                                    <h3 class="heading"><a href="#">Mes Informations Personnelles</a></h3>
+                                    <form method="post" class="billing-form">
+                                        <div class="row align-items-end">
+                                            <div class="col-md-12">
+                                                {% if response != "" and response != "OK" %}
+                                                    <p style="width: 100%" class="alert alert-danger"> {{ response }}</p>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="country">Sexe <span class="text-danger">*</span></label>
+                                                    <select name="sexe" class="form-control">
+                                                        <option {% if user.sexe == "M" %}selected{% endif %}>M.</option>
+                                                        <option  {% if user.sexe == "Mme" %}selected{% endif %}>Mme.</option>
+                                                        <option  {% if user.sexe == "Mlle" %}selected{% endif %}>Mlle.</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="firstname">Prénom <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" value="{{ user.prenom }}" name="prenom">
+                                                </div>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="lastname">Nom <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" name="nom"  value="{{ user.nom }}">
+                                                </div>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="streetaddress">Téléphone fix <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" value="{{ user.tel }}" name="tel">
+                                                </div>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="streetaddress">Téléphone mobile <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control"  value="{{ user.mobile }}" name="mobile">
+                                                </div>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="towncity">Adresse <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" name="adresse" value="{{ user.adresse }}">
+                                                </div>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="emailaddress">Email <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" name="email" value="{{ user.email }}">
+                                                </div>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="phone">Ancien mot de passe <span class="text-danger">*</span></label>
+                                                    <input type="password" name="pass1" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="phone">Nouveau mot de passe <span class="text-danger">*</span></label>
+                                                    <input type="password" name="pass2" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="phone">Confirmation du nouveau mot de passe <span class="text-danger">*</span></label>
+                                                    <input type="password" name="pass3" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="w-100"></div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <input type="submit" class="btn btn-primary py-3 px-4 btn-block" value="Valider" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form><!-- END -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- .col-md-8 -->
+                <div class="col-lg-4 sidebar ftco-animate">
+                    <div class="sidebar-box ftco-animate">
+                        <h3 class="heading">Mon compte</h3>
+                        <ul class="categories">
+                            <li class="activeLi"><a href="/panier/"><i class="icon-user"></i> {{ user.prenom }} &nbsp; {{ user.nom }}</a></li>
+                            <li class="centerText"><a href="/panier/"><i class="icon-shopping-cart"></i> Mon Panier</a></li>
+                            <li class="centerText"><a href="/mes-commandes/"><i class="icon-truck"></i> Mes Commandes</a></li>
+                            <li class="centerText"><a href="/deconnect/"><i class="icon-times-circle"></i> Déconnexion</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> <!-- .section -->
+
+{% endblock body %}
+{% block js %}
+    <script type="text/javascript">
+        var response = "{{ response }}";
+
+        if(response != ""){
+            if(response == "OK"){
+                errorResponse("Utilisateur modifiée !","success");
+            }
+            else{
+                errorResponse(response,"error");
+            }
+        }
+
+        function errorResponse(message,type) {
+            noty({
+                text: message,
+                type: type,
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 3000,
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+        }
+    </script>
+{% endblock js %}

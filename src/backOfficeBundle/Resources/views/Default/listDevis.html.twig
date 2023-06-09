@@ -1,0 +1,234 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+    DEVIS
+{% endblock title %}
+{% block style %}
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{{ asset("bundles/plugins/datatables-bs4/css/dataTables.bootstrap4.css") }}">
+{% endblock style %}
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Devis</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">Devis site</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Devis site</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <!-- form start -->
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h1 class="page-header"></h1>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="card card-primary">
+                                            <div class="card-header" style="cursor: pointer;" id="searchBox">
+                                                <h3 class="card-title" style="cursor: pointer;" id="searchBox">
+                                                Recherche</h3>
+                                            </h3>
+                                            </div>
+                                            <!-- /.panel-heading -->
+                                            <div class="panel-body" id="criteres" style="display: none;">
+                                                <form role="form" id="FormAdd" method="POST" style="padding: 2%">
+                                                    <div class="form-group" style="text-align: center;">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" name="etat[]" value="En attente"> <div class="etat" style="background: #DBA901;">En attente</div>
+                                                        </label>
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" name="etat[]" value="Envoyé"> <div class="etat" style="background: #086A87;">Envoyée</div>
+                                                        </label>
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" name="etat[]" value="Validé"> <div class="etat" style="background: #04B45F;">Validé</div>
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control" name="num" id="num" placeholder="Numero devis">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control" name="client" id="client" placeholder="Client">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Date début :</label>
+                                                        <input type="date" class="form-control" name="dated" id="dated" placeholder="Debut">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Date fin :</label>
+                                                        <input type="date" class="form-control" name="datef" id="datef" placeholder="Fin">
+                                                    </div>
+                                                    <div style="text-align: center;">
+                                                        <button type="submit" class="btn btn-success" id="submit">Rechercher</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!-- /.panel-body -->
+                                        </div>
+                                        <!-- /.panel -->
+                                    </div>
+                                    <!-- /.col-lg-12 -->
+                                </div>
+                                <br>
+                                <br>
+                                <div class="card" >
+                                    <div class="card-header" style="background-color: gray;">
+                                        <h3 class="card-title" >Liste des Devis</h3>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <div class="table-responsive" style="padding: 2%; ">
+                                        <table  id="example1" class="table table-bordered table-hover table-striped">
+                                            <thead  style="padding: 2%; ">
+                                            <tr  style="padding: 2%;" >
+                                                <th>Devis N°</th>
+                                                <th>Date</th>
+                                                <th>Client</th>
+                                                <th>Total</th>
+                                                <th>Etat</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for f in devis %}
+                                                <tr>
+                                                    <td>{{ f["devis"].numero }}</td>
+                                                    <td>{{ f["devis"].date|date("d-m-Y") }}</td>
+                                                    <td>{{ f["client"] }}</td>
+                                                    <td style="color:red;font-weight: bold;">{{ f["devis"].total|number_format(2, '.', ',') }} MAD</td>
+                                                    <td>
+                                                        {% if f["devis"].etat == "En attente"  %}
+                                                            <div class="etat" style="background: #DBA901;">{{ f["devis"].etat }}</div>
+                                                        {% elseif f["devis"].etat == "Envoyé"  %}
+                                                            <div class="etat" style="background: #086A87; ">{{ f["devis"].etat }}</div>
+                                                        {% elseif f["devis"].etat == "Validé"  %}
+                                                            <div class="etat" style="background: #04B45F;">{{ f["devis"].etat }}</div>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        <a href="/view-devis/?id={{ f["devis"].id }}" class="btn btn-success">Voir plus</a>
+                                                        <a class="btn btn-danger" onclick="deleteDevis({{ f["devis"].id }})">Supprimer</a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                                <!-- /.card -->
+                            </div>
+
+                            <!-- form end -->
+                        </div>
+                    </div>
+                </div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block js %}
+
+    <!-- DataTables -->
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/noty/packaged/jquery.noty.packaged.min.js') }}"></script>
+
+
+    <script type="text/javascript">
+        $("#example1").DataTable({
+            "language": {
+                "url": "/Bundle/ST/js/datatables/french-datatable.json"
+            }});
+
+
+
+        function messageUpdate(message,typeMessage) {
+            noty({
+                text: message,
+                type: typeMessage,
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 3000,
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+        }
+
+        function deleteDevis(id){
+            noty({
+                text: 'Etes vous sûr de vouloir supprimer le devis ?',
+                type: 'confirm',
+                theme: 'relax',
+                layout: 'center',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                },
+                buttons     : [
+                    {addClass: 'btn btn-primary', text: 'Oui', onClick: function ($noty) {
+                            loaderChangePage();
+                            $(".fadeMe").css("visibility","visible");
+                            var url = '/delete-devis/?id='+id;
+                            $.ajax({
+                                type: 'get',
+                                url: url,
+                                success: function(data){
+                                    if(data.response=="OK"){
+                                        window.location = "/list-devis/";
+                                    }
+                                    else{
+                                        messageUpdate("Une erreur s'est produite","error");
+                                        $("#progress").addClass("done");
+                                        $(".fadeMe").css("visibility","hidden");
+                                    }
+                                }
+                            });
+
+                            $noty.close();
+
+                        }
+                    },
+                    {addClass: 'btn btn-danger', text: 'Non', onClick: function ($noty) {
+                            $noty.close();
+
+                        }
+                    }
+                ]
+            });
+        }
+
+        $( "#searchBox" ).click(function() {
+            $( "#criteres" ).toggle( "slow" );
+        });
+    </script>
+
+
+{% endblock js %}

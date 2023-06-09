@@ -1,0 +1,142 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+    MODFIER UTILISATEUR
+{% endblock title %}
+{% block style %}
+
+{% endblock style %}
+
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Utilisateurs</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">Utilisateurs</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- Main content -->
+                        <section class="content">
+                            <div class="container-fluid">
+                                <!-- general form elements -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Modifier utilisateur</h3>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <div class="card-body">
+                                        <!-- form start -->
+
+                                        <form method="post">
+                                            <div class="form-group">
+                                                <label>Civilité:</label>
+                                                <select class="form-control">
+                                                    <option {% if user.sexe == "M" %}selected{% endif %}>M.</option>
+                                                    <option  {% if user.sexe == "Mme" %}selected{% endif %}>Mme.</option>
+                                                    <option  {% if user.sexe == "Mlle" %}selected{% endif %}>Mlle.</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Prénom:</label>
+                                                <input type="text" name="prenom" value="{{ user.prenom }}" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Nom:</label>
+                                                <input type="text" name="nom" value="{{ user.nom }}" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Téléphone fix:</label>
+                                                <input type="text" name="tel" value="{{ user.tel }}" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Téléphone mobile:</label>
+                                                <input type="text" name="mobile" value="{{ user.mobile }}" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Adresse:</label>
+                                                <textarea style="border:1px solid  #D8D8D8;" name="adresse"class="form-control">{{ user.adresse }}</textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Email:</label>
+                                                <input type="text" name="email" value="{{ user.email }}" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Nouveau Mot de passe:</label>
+                                                <input type="password" name="pass2"class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Confirmation du nouveau Mot de passe:</label >
+                                                <input type="password" name="pass3" placeholder="" class="form-control">
+                                            </div>
+                                            <br>
+                                            <div class="price-content">
+                                                <div class="content-price-two">
+                                                    <center><button type="submit" style="cursor:pointer;"  class="btn btn-success">Valider</button></center><br/>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                        <!-- form end -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                        </section>
+                    </div>
+                </div>
+                    <!-- /.card -->
+            </div>
+        </section>
+    </div>
+
+
+{% endblock body %}
+
+{% block js %}
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/noty/packaged/jquery.noty.packaged.min.js') }}"></script>
+    <script type="text/javascript">
+        var response = "{{ response }}";
+
+        if(response != ""){
+            if(response == "OK"){
+                errorResponse("Utilisateur modifiée !","success");
+            }
+            else{
+                errorResponse(response,"error");
+            }
+        }
+
+        function errorResponse(message,type) {
+            noty({
+                text: message,
+                type: type,
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 3000,
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+        }
+    </script>
+{% endblock js %}

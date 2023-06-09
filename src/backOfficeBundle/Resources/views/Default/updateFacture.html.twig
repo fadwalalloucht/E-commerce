@@ -1,0 +1,386 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+    MODIFIER FACTURE
+{% endblock title %}
+{% block style %}
+
+{% endblock style %}
+{% block body %}
+
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Modifier Facture </h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">Modifier Facture </li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12" style="padding-left: 0%;">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Modifier Facture </h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body" >
+                                <!-- form start -->
+                                <form role="form" action="/validation-update-facture/?idFacture={{ facture.id }}" method="POST" name="newFacture" id="newFacture">
+                                    <div class="col-lg-12">
+                                        <div id="response" style="margin-top: 10px;">
+
+                                        </div>  <div class="row">
+                                            <!-- left column -->
+                                            <div class="col-md-12">
+                                                <!-- general form elements -->
+                                                <div class="card card-primary">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">Information</h3>
+                                                    </div>
+                                                    <!-- /.card-header -->
+                                                    <div class="card-body">
+                                                        <!-- form start -->
+                                                        <div class="form-group row">
+                                                            <label>Raison sociale:</label><br>
+                                                            <p class="form-control-static">{{user.rs}}</p>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label>Adresse :</label>
+                                                            <p class="form-control-static">{{ user.adresse }}</p>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label>Telephone :</label>
+                                                            <p class="form-control-static">{{ user.tel }}</p>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Email :</label>
+                                                            <p class="form-control-static">{{ user.email }}</p>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>ICE :</label>
+                                                            <p class="form-control-static">{{ user.ice }}</p>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Echéance :</label>
+                                                            <input type="date" class="form-control" name="echeance" id="echeance" value="{{ facture.echance|date("Y-m-d") }}">
+                                                        </div>
+                                                        <!-- form end -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- /.card-body -->
+                                        </div>
+                                        <div class="row">
+                                            <!-- left column -->
+                                            <div class="col-md-12" >
+                                                <!-- general form elements -->
+                                                <div class="card card-primary">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">Client</h3>
+                                                    </div>
+                                                    <!-- /.card-header -->
+                                                    <div class="card-body">
+                                                        <!-- form start -->
+                                                        <div class="form-group row">
+                                                            <label>liste des Clients:</label>
+                                                            <select class="form-control" id="client" name="client" onchange="showClient()">
+                                                                <option value="">Nouveau Client</option>
+                                                                {% for c in clients %}
+                                                                    <option {% if c.id == facture.idClient %}selected{% endif %} value="{{ c.rs|replace({"'": " ", "|":" "}) }}|{{ c.adresse|replace({"'": " ", "|":" "}) }}|{{ c.tel|replace({"'": " ", "|":" "}) }}|{{ c.fax|replace({"'": " ", "|":" "}) }}|{{ c.email|replace({"'": " ", "|":" "}) }}|{{ c.id }}">{{ c.rs }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label>Client :</label>
+                                                            <input type="hidden" name="actionClient" id="actionClient" value="new">
+                                                            <input type="text" class="form-control" name="rs" id="rs">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label>Adresse :</label>
+                                                            <input type="text" class="form-control" name="adresse" id="adr">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label>Telephone :</label>
+                                                            <input type="text" class="form-control" name="tel" id="tel">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Fax :</label>
+                                                            <input type="text" class="form-control" name="fax" id="fax">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Email :</label>
+                                                            <input type="text" class="form-control" name="email" id="em">
+                                                        </div>
+
+                                                        <!-- form end -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- /.card-body -->
+                                        </div>
+                                        <div class="row">
+                                            <!-- left column -->
+                                            <div class="col-md-12" >
+                                                <!-- general form elements -->
+                                                <div class="card card-primary">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">Produit</h3>
+                                                    </div>
+                                                    <!-- /.card-header -->
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="panel panel-default" style="padding: 2%;">
+                                                                <div class="panel-body">
+                                                                   <div class="table-responsive">
+                                                                    <table class="table table-bordered table-hover table-striped">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th>Decription</th>
+                                                                            <th>Prix unitaire</th>
+                                                                            <th>Qte</th>
+                                                                            <th>Total HT</th>
+                                                                            <th>% TVA</th>
+                                                                            <th></th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tbody id="articles">
+                                                                        {% for d in detail %}
+                                                                            <tr class="detail" id="row-{{ d.id }}">
+                                                                                <td>
+                                                                                    <input list='prod-list-{{ d.id }}' name='desc[]' type='text' id='row-cellDesc-{{ d.id }}' onChange ='getInfosService({{ d.id }})' value="{{ d.description }}">
+                                                                                    <input type='hidden' name='idProd[]' id='idProd-{{ d.id }}' value="{{ d.IdProduitStock }}">
+                                                                                    <input type='hidden' name='refProd[]' id='ref-{{ d.id }}' value="{{ d.ref }}">
+                                                                                    <input type='hidden' name='idDet[]' value='{{ d.id }}' id="idDet-{{ d.id }}">
+                                                                                    <datalist id='prod-list-{{ d.id }}'>
+                                                                                        {% set max = 1 %}
+                                                                                        {% for s in service %}
+                                                                                            {% if s.id == d.IdProduitStock %}
+                                                                                                {% set max = s.qte+d.qte %}
+                                                                                            {% endif %}
+                                                                                            <option id='{{ s.prixht }}|{{ s.prixtva }}|{{ s.id }}|{{ s.reference }}' value='{{ s.description }}'>{{ s.description }}</option>
+                                                                                        {% endfor %}
+                                                                                    </datalist>
+                                                                                </td>
+                                                                                <td><input type='text' name='puht[]' id='puht-{{ d.id }}' value='{{ d.prixU }}' onchange='calculRow({{ d.id }})'></td>
+                                                                                <td><input type='number' name='qte[]' id='qte-{{ d.id }}' class='numberStyle' min='1' value='{{ d.qte }}' max="{{ max }}" onchange='calculRow({{ d.id }})'></td>
+                                                                                <td><input type='text' name='ptht[]' id='ptht-{{ d.id }}' value='{{ d.totalHT }}' readonly class='ptht'></td>
+                                                                                <td><input type='text' name='tva[]' id='tva-{{ d.id }}' value='{{ d.tva }} %'class='tva' onchange='calulAll()'></td>
+                                                                                <td><div class="delete"><i class="fa fa-trash" onclick="removeRow({{ d.id }},'update')"></i></div></td>
+                                                                            </tr>
+                                                                        {% endfor %}
+                                                                        </tbody>
+                                                                    </table>
+                                                                   </div>
+                                                                    <br>
+                                                                    <div class="col-lg-6">
+                                                                        <a class="btn btn-warning" onclick="addRow()" style="margin-bottom: 5px;"><i class="fa fa-plus"></i> Ajouter une ligne</a>
+                                                                    </div>
+                                                                    <div class="col-lg-6" style="margin-left: 49%;">
+                                                                        <div style="border: 1px solid silver;background:#D8D8D8;text-align: right;padding: 5px;margin: 2%;">
+                                                                            <b>Total HT : </b> <span id="totalHT">0.00</span> <span id="monH">DH</span><br/>
+                                                                            <div id="totalTvaF"></div><br/>
+                                                                            <b>Total TTC : </b> <span id="totalTTCS">0.00</span> <span id="monT">DH</span>
+                                                                            <input type="hidden" name="totalTTC" id="totalTTC">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- /.panel-body -->
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.col-lg-12 (nested) -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <!-- left column -->
+                                            <div class="col-md-12" >
+                                                <!-- general form elements -->
+                                                <div class="card card-primary">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">Remise</h3>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="panel panel-default"  style="padding: 2%;">
+                                                                <br>
+                                                                <div class="panel-body">
+                                                                    <div class="input-group mb-3">
+                                                                        <div class="input-group-prepend">
+                                                                            <span class="input-group-text">Remise</span>
+                                                                        </div>
+                                                                        <input type="text" class="form-control"  id="remise" aria-label="Amount (to the nearest dollar)">
+                                                                        <div class="input-group-append">
+                                                                            <span class="input-group-text">%</span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <center><a class="btn btn-info" onclick="remiseClient()">Appliquer la remise</a></center>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <!-- left column -->
+                                            <div class="col-md-12" >
+                                                <!-- general form elements -->
+                                                <div class="card card-primary">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">Conditions</h3>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="panel panel-default" style="padding: 2%;">
+                                                                <br>
+                                                                <div class="panel-body">
+                                                                    <div class="form-group">
+                                                                        <label>Si vous laissez le champ vide, il ne sera pas visible dans la facture</label>
+                                                                        <textarea class="form-control" rows="3" placeholder="Vos conditions ici" name="terms"></textarea>
+                                                                    </div>
+                                                                    <div class="col-lg-6">
+                                                                        <div class="form-group">
+                                                                            <label>Mode de paiement</label>
+                                                                            <select class="form-control" name="paiement">
+                                                                                <option {% if facture.modePaiement == "Espèce" %}selected{% endif %}>Espèce</option>
+                                                                                <option {% if facture.modePaiement == "Chéque" %}selected{% endif %}>Chéque</option>
+                                                                                <option {% if facture.modePaiement == "Virement" %}selected{% endif %}>Virement</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-6" style="margin-left: 45%;">
+                                                                        <br/>
+                                                                        <a class="btn btn-success" onclick="validation('#newFacture',{{ facture.id }})">Valider la facture</a>
+                                                                        <a href="/list-facture/" class="btn btn-danger">Annuler</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- form end -->
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+
+            </div>
+            <!-- /.card-body -->
+        </section>
+    </div>
+    <!-- /.card -->
+
+{% endblock body %}
+{% block js %}
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/facture.js') }}"></script>
+    <script type="text/javascript">
+
+        var listOfServices = {{ produits|json_encode|raw }};
+        var response = "{{ response }}";
+        if(response != ""){
+            if(response == "OK"){
+                messageUpdate("Modification enregistrée","success");
+            }
+            else{
+                messageUpdate(response,"error");
+            }
+        }
+
+        function messageUpdate(message,typeMessage) {
+            noty({
+                text: message,
+                type: typeMessage,
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 3000,
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+        }
+    </script>
+
+    <script type="text/javascript">
+        $( document ).ready(function() {
+            showClient();
+            calulAll();
+        });
+        function deleteDetail(id){
+            noty({
+                text: 'Etes vous sûr de vouloir supprimer la ligne ?',
+                type: 'confirm',
+                theme: 'relax',
+                layout: 'center',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                },
+                buttons     : [
+                    {addClass: 'btn btn-primary', text: 'Oui', onClick: function ($noty) {
+                            $(".fadeMe").css("visibility","visible");
+                            var url = '/remove-detail/?id='+id;
+                            $.ajax({
+                                type: 'get',
+                                url: url,
+                                success: function(data){
+                                    if(data.response=="OK"){
+                                        document.getElementById("row-"+id).innerHTML = "";
+                                        calulAll();
+                                        $(".fadeMe").css("visibility","hidden");
+                                    }
+                                    else{
+                                        messageUpdate("Une erreur s'est produite","error");
+                                        $(".fadeMe").css("visibility","hidden");
+                                    }
+                                }
+                            });
+
+                            $noty.close();
+
+                        }
+                    },
+                    {addClass: 'btn btn-danger', text: 'Non', onClick: function ($noty){
+                            $noty.close();
+
+                        }
+                    }
+                ]
+            });
+        }
+    </script>
+
+{% endblock js %}

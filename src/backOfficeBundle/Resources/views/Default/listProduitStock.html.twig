@@ -1,0 +1,199 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+    PRODUIT STOCK
+{% endblock title %}
+{% block style %}
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{{ asset("bundles/plugins/datatables-bs4/css/dataTables.bootstrap4.css") }}">
+
+{% endblock style %}
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Produit Stock</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">Produit Stock</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Produit Stock</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <!-- form start -->
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h1 class="page-header"></h1>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <h1 class="page-header" style="text-align: right;"><a href="/add-ProduitStock/" class="btn btn-success">Ajouter un produit de stock</a></h1>
+                                    </div>
+
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Produit Stock</h3>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <div class="card-body">
+                                        <table id="example1" class="table table-bordered table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>Référence N°</th>
+                                                <th>Titre</th>
+                                                <th>Catégorie</th>
+                                                <th>Prix HT</th>
+                                                <th>Prix TVA</th>
+                                                <th>Prix TTC</th>
+                                                <th>Quantite</th>
+                                                <th>Description</th>
+                                                <th>Action</th>
+
+
+
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+
+                                            {% for p in produitstock %}
+
+                                                <tr>
+                                                    <td>{{p["produitstock"].reference}}</td>
+                                                    <td>{{p["produitstock"].titre}}</td>
+                                                    <td>{{p["categorie"]}}</td>
+                                                    <td>{{p["produitstock"].prixHt}}</td>
+                                                    <td>{{p["produitstock"].prixtva}}</td>
+                                                    <td>{{p["produitstock"].prixttc}}</td>
+                                                    <td>{{p["produitstock"].qte}}</td>
+                                                    <td>{{p["produitstock"].description}}</td>
+                                                    <td>
+                                                        <a href="/update-productstock-db/{{ p["produitstock"].id }}/" class="btn btn-info">Modifier</a>
+                                                        <a class="btn btn-danger" onclick="deleteProduct({{p["produitstock"].id}})">Supprimer</a>
+                                                    </td>
+                                                </tr>
+
+                                            {% endfor %}
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                                <!-- /.card -->
+                            </div>
+
+                            <!-- form end -->
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </section>
+
+    </div>
+
+{% endblock %}
+{% block js %}
+
+    <!-- DataTables -->
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/noty/packaged/jquery.noty.packaged.min.js') }}"></script>
+
+
+    <script type="text/javascript">
+
+
+        $("#example1").DataTable({
+            "language": {
+                "url": "/Bundle/ST/js/datatables/french-datatable.json"
+            }});
+
+
+        function messageUpdate(message,typeMessage) {
+            noty({
+                text: message,
+                type: typeMessage,
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 3000,
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+        }
+
+        function deleteProduct(id){
+            noty({
+                text: 'Etes vous sûr de vouloir supprimer le produit ? <br/><span style="color:red;">Attention, toutes les informations liées au produit seront supprimées (Devis, factures et paiement)</span> ',
+                type: 'confirm',
+                theme: 'relax',
+                layout: 'center',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                },
+                buttons     : [
+                    {addClass: 'btn btn-primary', text: 'Oui', onClick: function ($noty) {
+                            loaderChangePage();
+                            $(".fadeMe").css("visibility","visible");
+                            var url = '/delete-product/?id='+id;
+                            $.ajax({
+                                type: 'get',
+                                url: url,
+                                success: function(data){
+                                    if(data.response=="OK"){
+                                        window.location = "/list-ProduitStock-site/";
+                                    }
+                                    else{
+                                        messageUpdate("Une erreur s'est produite","error");
+                                        $("#progress").addClass("done");
+                                        $(".fadeMe").css("visibility","hidden");
+                                    }
+                                }
+                            });
+
+                            $noty.close();
+
+                        }
+                    },
+                    {addClass: 'btn btn-danger', text: 'Non', onClick: function ($noty) {
+                            $noty.close();
+
+                        }
+                    }
+                ]
+            });
+        }
+    </script>
+
+
+
+{% endblock js %}

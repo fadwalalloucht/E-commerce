@@ -1,0 +1,11 @@
+{% for c in catAff %}
+    <ul>
+        <a style="color: #1e1e1e" href="/produit/{{ c['cat'].nom|replace({"/":"-"," ":"-" }) }}/{{ c['cat'].id }}/" class="plink"><p><i class="fa fa-check" aria-hidden="true"></i>
+                <span style="font-weight: 600;">{{ c['cat'].nom }}</span>
+        </a>
+        {% for p in c['sousCat'] %}
+            <li><a style="color: #1e1e1e" href="/produit/{{ p.nom|replace({"/":"-"," ":"-" }) }}/{{ c['cat'].id }}/{{ p.id }}/"><i class="fa fa-caret-right" aria-hidden="true"></i>{{ p.nom }}</a></li>
+        {% endfor %}
+
+    </ul>
+{% endfor %}

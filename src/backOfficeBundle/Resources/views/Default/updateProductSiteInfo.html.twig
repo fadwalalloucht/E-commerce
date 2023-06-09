@@ -1,0 +1,318 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+    INFO PRODUIT
+{% endblock title %}
+{% block style %}
+    <link rel="stylesheet" media="screen" type="text/css" href="{{ asset('Bundle/ST/css/layout.css') }}" />
+{% endblock style %}
+
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Produit</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">Produit du site</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Modification produit 2/2</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <!-- form start -->
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <form role="form" id="FormAdd" method="POST">
+                                                    <div class="form-group">
+                                                        <label>Taille :</label>
+                                                        <select class="form-control" name="taille" id="taille">
+                                                            <option value="vide">--</option>
+                                                            {% for t in Tailles %}
+                                                                <option value="{{ t.TitleTaille }}">{{ t.TitleTaille }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group input-group" id="valeur_taille">
+                                                        <span class="input-group-text">Valeur de unité</span>
+                                                        <input type="text" class="form-control" name="valeur_taille" id="valeur_taille">
+                                                    </div>
+                                                    <div class="form-group input-group" id="prixSite">
+                                                        <span class="input-group-text">Prix du site</span>
+                                                        <input type="text" class="form-control" name="prixSite" value="0" id="prixSiteVal">
+                                                        <span class="input-group-text"> MAD </span>
+                                                    </div>
+                                                    <div class="form-group input-group">
+                                                        <span class="input-group-text">Prix promotion</span>
+                                                        <input type="text" class="form-control" name="prixPromotion" id="prixPromotionVal" placeholder="Laissez vide si le produit n'est pas en promotion">
+                                                        <span class="input-group-text"> MAD </span>
+                                                    </div>
+                                                    <div class="form-group input-group" id="valeur_taille">
+                                                        <span class="input-group-text">Quantité</span>
+                                                        <input type="text" class="form-control" name="qte" id="qte">
+                                                    </div>
+                                                    <div class="form-group input-group">
+                                                        <div class="form-group">
+                                                            <label>Ajouter caractéristiques techniques:</label>
+                                                            <label class="checkbox-inline">
+                                                                <input type="checkbox" onchange="addC()" name="addCarac" id="addCarac" value="1"> Oui
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-group input-group" id="Carac" style="display: none;">
+                                                            <span class="input-group-text">Longeur</span>
+                                                            <input type="text" class="form-control" name="Longeur" value="0" id="LongeurVal">
+                                                            <span class="input-group-text"> CM </span>
+
+                                                            <span class="input-group-text">Largeur</span>
+                                                            <input type="text" class="form-control" name="Largeur" value="0" id="LargeurVal">
+                                                            <span class="input-group-text"> CM </span>
+
+                                                            <span class="input-group-text">Hauteur</span>
+                                                            <input type="text" class="form-control" name="Hauteur" value="0" id="HauteurVal">
+                                                            <span class="input-group-text"> CM </span>
+
+                                                            <span class="input-group-text">Poids</span>
+                                                            <input type="text" class="form-control" name="Poids" value="0" id="PoidsVal">
+                                                            <span class="input-group-text"> KG </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" id="submit" class="btn btn-primary">Ajouter</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!-- /.col-lg-12 (nested) -->
+                                        </div>
+                                        <!-- /.row (nested) -->
+                                    </div>
+                                    <div class="card card-primary">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Liste taille</h3>
+                                        </div>
+                                        <!-- /.card-header -->
+                                        <div class="card-body">
+                                            <!-- form start -->
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-hover table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Produit</th>
+                                                        <th>Prix du site</th>
+                                                        <th>Prix promotion</th>
+                                                        <th>Unité/Valeur</th>
+                                                        <th>Longeur</th>
+                                                        <th>Largeur</th>
+                                                        <th>Hauteur</th>
+                                                        <th>Poids</th>
+
+                                                        <th>Quantité</th>
+                                                        <th></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for p in iproduits %}
+                                                        <tr>
+                                                            <td>
+                                                                {% for pr in produit if pr.id==p.idProduit%}
+                                                                    {{ pr.titre }}
+                                                                {% endfor %}
+                                                            </td>
+                                                            <td>{{ p.prix }}</td>
+                                                            <td>{{ p.newPrix }}</td>
+                                                            <td>{{ p.titleTaille }} {{ p.valeurTaille }}</td>
+                                                            <td>{{ p.Longeur }}</td>
+                                                            <td>{{ p.Largeur }}</td>
+                                                            <td>{{ p.Hauteur }}</td>
+                                                            <td>{{ p.Poids }}</td>
+
+                                                            <td>{{ p.qteStock }}</td>
+                                                            <td><center><a class="btn btn-danger" class="btn btn-danger" onclick="deleteInfoProduit({{ p.id }},'{{ p.titleTaille }}',{{ id }},'{{ p.valeurTaille }}')"><i class="fa fa-trash"></i></a></center></td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                                <div style="text-align: center;">
+                                                    <a type="button" class="btn btn-success"onclick="suivant({{ id }})">Enregistrer</a>
+
+                                                </div>
+                                            </div>
+                                            <!-- form end -->
+                                        </div>
+                                    </div>
+                                    <!-- /.panel-body -->
+                                </div>
+                                <!-- form end -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </section>
+    </div>
+
+
+{% endblock body %}
+{% block js %}
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/jquery.popupoverlay.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/noty/packaged/jquery.noty.packaged.min.js') }}"></script>
+    <script type="text/javascript">
+
+        function suivant(id)
+        {
+            $.ajax({
+                url:'/suivant/',
+                type: "POST",
+                data: {'id':id},
+                success: function (data)
+                {
+                    if(data.response=="success")
+                    {
+                        window.location='/updateProductSiteInfo/?id='+id;
+                        messageUpdate("Modifier avec succee","success");
+                    }
+                    else
+                    {
+                        messageUpdate("ajouter un prix","error");
+                    }
+                }
+            });
+        }
+
+        function deleteInfoProduit(id,taille,idx){
+            noty({
+                text: 'Etes vous sûr de vouloir supprimer? ',
+                type: 'confirm',
+                theme: 'relax',
+                layout: 'center',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                },
+                buttons     : [
+                    {addClass: 'btn btn-primary', text: 'Oui', onClick: function ($noty) {
+                            loaderChangePage();
+                            $(".fadeMe").css("visibility","visible");
+                            var url = '/delete-info-produit/?id='+id+'&taille='+taille;
+                            $.ajax({
+                                type: 'get',
+                                url: url,
+                                success: function(data){
+                                    if(data.response=="OK!"){
+                                        location.href = "/updateProductSiteInfo/?id="+idx;
+                                    }
+                                    else{
+                                        messageUpdate("Une erreur s'est produite","error");
+                                        $("#progress").addClass("done");
+                                        $(".fadeMe").css("visibility","hidden");
+                                    }
+                                }
+                            });
+
+                            $noty.close();
+
+                        }
+                    },
+                    {addClass: 'btn btn-danger', text: 'Non', onClick: function ($noty) {
+                            $noty.close();
+
+                        }
+                    }
+                ]
+            });
+        }
+
+        $(document).ready(function () {
+            $("#desc").cleditor()[0].focus();
+
+        });
+
+        var response = "{{ response }}";
+
+        if(response != ""){
+            if(response != "OK"){
+                messageUpdate(response,"error");
+            }
+            else{
+                messageUpdate("ajouté !","success");
+            }
+        }
+
+        function messageUpdate(message,typeMessage) {
+            noty({
+                text: message,
+                type: typeMessage,
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 3000,
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+        }
+
+
+
+        function errorupload(message) {
+
+            noty({
+                text: message,
+                type: 'error',
+                theme: 'relax',
+                layout: 'topCenter',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+            });
+        }
+        function addC(){
+            $("#Carac").toggle();
+        }
+
+        function calculPrix(){
+            var ht = parseInt(document.getElementById("ht").value);
+            var tva = document.getElementById("tva").value;
+            if(tva != "" && ht != ""){
+                var pttc = parseInt(ht+(ht*(tva/100)));
+                document.getElementById("ttc").value = pttc;
+            }
+        }
+
+
+    </script>
+
+{% endblock js %}
+

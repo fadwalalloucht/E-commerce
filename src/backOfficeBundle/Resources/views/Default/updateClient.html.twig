@@ -1,0 +1,166 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+    MODIFIER CLIENT
+{% endblock title %}
+{% block style %}
+
+{% endblock style %}
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Modifier Les Information D'un  Client</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">Modifier Client</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Modifier Client</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <!-- form start -->
+                                <form role="form" id="FormAdd" method="post" >
+
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>   <label>RS :</label>
+                                        <input type="text" class="form-control" name="rs" value="{{client.rs}}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>   <label>Responsable :</label>
+                                        <input type="text" class="form-control" name="responsable" value="{{client.responsable}}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>  <label>Email :</label>
+                                        <input type="text" class="form-control" name="email" value="{{client.email}}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>   <label>Adresse :</label>
+                                        <input type="text" class="form-control" name="adresse" value="{{client.adresse}}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>  <label>Tele :</label>
+                                        <input type="text" class="form-control" name="tele" value="{{client.tel}}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>   <label>Fax :</label>
+                                        <input type="text" class="form-control" name="fax" value="{{client.fax}}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>   <label>Activité :</label>
+                                        <textarea class="form-control cleditor" rows="3" name="activite">{{client.activit}}</textarea>
+                                    </div>
+
+                                    <div style="text-align: center;">
+                                        <button type="submit" class="btn btn-success" id="submit" >Enregistrer</button>
+                                    </div>
+                                </form>
+                                <div id="response" style="margin-top: 10px;">
+
+                                </div>
+                                <!-- form end -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </section>
+    </div>
+
+
+{% endblock body %}
+{% block js %}
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/jquery.popupoverlay.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/noty/packaged/jquery.noty.packaged.min.js') }}"></script>
+    <script type="text/javascript">
+        {% if response is defined and response!="" and response!="success" %}
+        $(document).ready(function () {
+
+            noty({
+                text: "{{ response }}",
+                type: "error",
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 3000,
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+
+        });
+        {% endif %}
+        {% if response2 is defined and response2!="" and response2!="success" %}
+        $(document).ready(function () {
+
+            noty({
+                text: "{{ response2 }}",
+                type: "error",
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 3000,
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+
+        });
+        {% endif %}
+        {% if response is defined and response=="success" %}
+        $(document).ready(function () {
+
+            noty({
+                text: "Opération pass avec succés",
+                type: "success",
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 3000,
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+
+        });
+
+        {% endif %}
+
+
+    </script>
+{% endblock js %}

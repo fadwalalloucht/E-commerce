@@ -1,0 +1,79 @@
+{% extends "@frontOffice/base1.html.twig" %}
+{% block title %}
+    MES COMMANDES
+{% endblock title %}
+{% block body %}
+    <style>
+        .activeLi{
+            background-color: #dbcc8f;
+            text-align: center;
+        }
+        .centerText{
+            text-align: center;
+        }
+    </style>
+    <div class="hero-wrap hero-bread" style="background-image: url({{ asset('Bundle/assets/images/51.jpg') }});">
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-9 ftco-animate text-center">
+                    <h1 class="mb-0 bread">Mon compte</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="ftco-section ftco-degree-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 order-lg-last ftco-animate">
+                    <div class="row">
+                        <div class="col-md-12 d-flex ftco-animate">
+                            <div class="blog-entry align-self-stretch d-md-flex">
+                                <div class="text d-block pl-md-4">
+                                    <h3 class="heading"><a href="#">Mes Commandes</a></h3>
+                                    <form method="post" class="billing-form">
+                                        {% if commandes|length !=0 %}
+                                            <table class="table table-hover">
+                                                <tr>
+                                                    <th>NUM COMMANDE</th>
+                                                    <th>DATE DE LA COMMANDE</th>
+                                                    <th>DETAILS DE LA COMMANDE</th>
+                                                </tr>
+                                                {% for c in commandes %}
+                                                    <tr>
+                                                        <td>#{{ c.id }}{{ c.dateCommande|date('Y-m-d')|replace({'-':''}) }}</td>
+                                                        <td>{{ c.dateCommande|date('Y-m-d' ) }}</td>
+                                                        <td> <a href="/mon-detail-commande/{{ c.id }}{{ c.dateCommande|date('Y-m-d')|replace({'-':''}) }}/{{ c.id }}/" class="afficher-link">
+                                                                <i class="icon-eye"></i>
+                                                                Afficher les détails</a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </table>
+                                        {% else %}
+                                            <div class="tfoot">
+                                                <button type="button"  onclick="setLocation('/index/')" class="btn btn-info">
+                                                    <span>Vous n'avez effectué aucune commande ,Veuillez cliquer ici pour faire vos achats </span>
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    </form><!-- END -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- .col-md-8 -->
+                <div class="col-lg-4 sidebar ftco-animate">
+                    <div class="sidebar-box ftco-animate">
+                        <h3 class="heading">Mon compte</h3>
+                        <ul class="categories">
+                            <li class="centerText"><a href="/panier/"><i class="icon-user"></i> {{ user.prenom }} {{ user.nom }}</a></li>
+                            <li class="centerText"><a href="/panier/"><i class="icon-shopping-cart"></i> Mon Panier</a></li>
+                            <li class="activeLi"><a href="/mes-commandes/"><i class="icon-truck"></i> Mes Commandes</a></li>
+                            <li class="centerText"><a href="/deconnect/"><i class="icon-times-circle"></i> Déconnexion</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock body %}

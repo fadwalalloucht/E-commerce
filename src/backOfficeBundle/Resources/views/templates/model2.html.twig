@@ -1,0 +1,118 @@
+<page>
+    <table style="width: 100%;" border="0" align="center">
+        <tr>
+            <td valign="top" colspan="3">
+                <img src="./Bundle/assets/images/logo1.png" style="height:100px;">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" valign="top">
+                <div style="width:100%;border-bottom:2px solid black;height:10px;"></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="height: 10px;"></td>
+        </tr>
+        <tr>
+            <td valign="top" style="width :40%;">
+                <div style="padding:10px;border:1px solid black;border-radius:5px;">
+                    <b>Raison sociale :</b> {{ entreprise.raisonsociale }}<br/>
+                    <b>Adresse :</b> {{ entreprise.adresse }}<br/>
+                    <b>Telephone :</b> {{ entreprise.tel }}<br/>
+                    <b>Fax :</b> {{ entreprise.fax }}<br/>
+                    <b>Email :</b>{{ entreprise.email }}<br/>
+                    <b>ICE :</b>{{ entreprise.ice }}
+                </div>
+            </td>
+            <td style="width :20%;"></td>
+            <td valign="top" style="width :40%;">
+                <div style="padding:10px;border:1px solid black;border-radius:5px;">
+                    {% if type == "facture" %}<b>Facturé à :</b><br/>{% endif %}
+                    <b>Raison sociale :</b> {{ client.rs }}<br/>
+                    <b>Adresse :</b> {{ client.adresse }}<br/>
+                    <b>Telephone :</b> {{ client.tel }}<br/>
+                    <b>Fax :</b> {{ client.fax }}<br/>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="height: 10px;"></td>
+        </tr>
+        <tr>
+            <td valign="top" colspan="3" align="center">
+                <b>{% if type == "facture" %}Facture{% else %}Devis{% endif %} N° : {{ facture.numero }}</b> - <b>Date : </b> {{ facture.date|date("d-m-Y") }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" valign="top">
+                <div style="width:100%;border-bottom:2px solid black;height:10px;"></div>
+            </td>
+        </tr>
+        {% if type == "facture" %}
+            <tr>
+                <td colspan="3" style="height:30px;">
+                    Date d'écheance : {{ facture.echance|date("d-m-Y") }}
+                </td>
+            </tr>
+        {% endif %}
+        <tr>
+            <td colspan="3" valign="top">
+                <table border="1" style="border-collapse:collapse;border-color:#BDBDBD;;width: 100% !important;">
+                    <tr valign="middle" style="background:black;color:#ffffff;">
+                        <td style="padding-left:5px;width:10%;height:20px;line-height: 20px;">Ref</td>
+                        <td style="padding-left:5px;width:40%;">Description</td>
+                        <td style="padding-left:5px;width:15%;">Prix HT</td>
+                        <td style="padding-left:5px;width:10%;">Qte</td>
+                        <td style="padding-left:5px;width:15%;">Total HT</td>
+                        <td style="padding-left:5px;width:10%;">% TVA</td>
+                    </tr>
+                    {% for d in detail %}
+                        <tr>
+                            <td style="padding-left:5px;">{{ d.ref }}</td>
+                            <td style="padding-left:5px;">{{ d.description }}</td>
+                            <td style="padding-left:5px;">{{ d.prixU|number_format(2, '.', ',') }} {{ facture.monnaie }}</td>
+                            <td style="padding-left:5px;">{{ d.qte }}</td>
+                            <td style="padding-left:5px;">{{ d.totalHT|number_format(2, '.', ',') }} {{ facture.monnaie }}</td>
+                            <td style="padding-left:5px;">{{ d.tva }} %</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="height: 30px;"></td>
+        </tr>
+        <tr>
+            <td valign="top" style="width :40%;">
+                {% if facture.terms !="" %}
+                    <div style="padding:10px;border:1px solid black;border-radius:5px;max-width: 400px;">
+                        {{ facture.terms }}
+                    </div>
+                {% endif %}
+            </td>
+            <td style="width :20%;"></td>
+            <td valign="top" style="width :40%;">
+                <table border="0" style="width: 100%;">
+                    <tr valign="middle">
+                        <td style="padding-left:5px;width:60%;height: 20px;">Total HT</td>
+                        <td style="padding-right:5px;width:40%;height: 20px;text-align: right;">{{ totalHT|number_format(2, '.', ',') }} {{ facture.monnaie }}</td>
+                    </tr>
+                    {% for t in tva %}
+                        <tr valign="middle" >
+                            <td style="padding-left:5px;width:60%;height: 20px;">Total TVA {{ t['tva'] }} %</td>
+                            <td style="padding-right:5px;width:40%;height: 20px;text-align: right;">{{ t['total']|number_format(2, '.', ',') }} {{ facture.monnaie }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr valign="middle" style="background:black;color:#ffffff;">
+                        <td style="padding-left:5px;width:60%;height: 20px;">Total TTC</td>
+                        <td style="padding-right:5px;width:40%;height: 20px;text-align: right;">{{ facture.total|number_format(2, '.', ',') }} {{ facture.monnaie }}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</page>
+<page_footer>
+    <div style="width:100%;border-bottom:2px solid black;height:10px;"></div>
+    <div style="text-align :center;width: 100%;font-size: 9px;">{{ entreprise.raisonsociale }}{% if entreprise.capital > 0 %} au capital de {{ entreprise.capital|number_format(2, '.', ',') }} DH{% endif %}, IF: {{ entreprise.identifiantF }}, RC : {{ entreprise.raisonsociale }}, PATTENTE : {{ entreprise.pattente }}, CNSS : {{ entreprise.cnss }}.<br/> {{ entreprise.site }}</div>
+</page_footer>

@@ -1,0 +1,106 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+COMMANDES
+{% endblock title %}
+{% block style %}
+
+{% endblock style %}
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Notifications</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">Liste des commandes</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Commandes</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <!-- form start -->
+                                <div class="table-responsive">
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Date commande</th>
+                                            <th>Nom et prenom</th>
+                                            <th>Validation</th>
+                                            <th>Total</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for c in commande %}
+                                            <tr style="cursor:pointer;" onclick="setLocation('/detail-commande/?id={{ c["commande"].id  }}')">
+                                                <td>{{ c["commande"].dateCommande|date('Y-m-d') }}</td>
+                                                <td>{{ c["membre"].nom  }}&nbsp;{{ c["membre"].prenom  }}</td>
+                                                <td>{% if c["commande"].validation == "1" %}<i class="fa fa-check" style="color: lime; " aria-hidden="true"></i>
+                                                    {% else %}<i class="fa fa-times" style="color: #cc0000" aria-hidden="true"></i>
+                                                    {% endif %} </td>
+                                                <td>{{ c["commande"].total|number_format(2, '.', ',')  }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- form end -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </section>
+    </div>
+{% endblock body %}
+{% block js %}
+    <script type="text/javascript">
+        $("#example1").DataTable({
+            "language": {
+                "url": "/Bundle/ST/js/datatables/french-datatable.json"
+            }});
+
+
+
+        function messageUpdate(message,typeMessage) {
+            noty({
+                text: message,
+                type: typeMessage,
+                theme: 'relax',
+                layout: 'bottom',
+                timeout: 3000,
+                animation: {
+                    open: 'animated flipInX',
+                    close: 'animated flipOutX', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+
+            });
+        }
+
+        function setLocation(location){
+            window.location.href=location;
+        }
+    </script>
+{% endblock js %}

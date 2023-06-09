@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>
+        {% block title %}
+
+        {% endblock title %}
+    </title>
+    <meta name="description" content="{% block desc %}{% endblock %}">
+    {% block metashare %}{% endblock %}
+    <meta name="author" content="PROXISOFT">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
+
+    <link href="{{ asset('Bundle/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="{{ asset('Bundle/assets/css/fontawesome.css') }}">
+    <link rel="stylesheet" href="{{ asset('Bundle/assets/css/tooplate-main.css?v=1.1') }}">
+    <link rel="stylesheet" href="{{ asset('Bundle/assets/css/owl.css') }}">
+    <link rel="stylesheet" href="{{ asset('Bundle/ST/css/animate.css') }}">
+</head>
+
+<body class="body">
+
+    <!-- Pre Header -->
+    <div id="pre-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 ">
+                    <div class="pull-right">
+                        <a href="/contact/"><span>Contactez-nous</span></a> <span>|</span> <a href="/a-propos/"><span>A propos</span></a>
+                    </div>
+                    <div class="pull-left">
+                        <span><i class="fa fa-phone" aria-hidden="true"> </i> +212 6 61 78 67 98 | +212 6 61 78 67 98  </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <div class="container">
+            <div class="navbar-brand">
+                <div class="row" style="padding: 0 !important;">
+                    <div class="col-md-3" id="blockLogo">
+                        <a href="/index/">
+                            <img src="{{ asset('Bundle/assets/images/logo1.png') }}" alt="" style="max-height:70px;">
+                        </a>
+                    </div>
+                    <div class="col-md-6" id="blockSearch">
+                        <form action="/search/" method="POST" id="formsearch">
+                            <i aria-hidden="true" class="fa fa-search"></i>
+                            <input name="key" type="text" class="form-control search" id="name" placeholder="Votre recherche ici..." required="" style="outline: none;">
+                        </form>
+                    </div>
+                    <div class="col-md-3" id="blockAccount">
+                        <div class="row">
+                            <div class="col-md-6" style="border-left:1px solid #eee;">
+                                <a href="/panier/">
+                                    <div class="icon-cart" style="clear: left; float: left;">
+                                        <div class="cart-line-1" style="background-color: #D34011;"></div>
+                                        <div class="cart-line-2" style="background-color: #D34011;"></div>
+                                        <div class="cart-line-3" style="background-color: #D34011;"></div>
+                                        <div class="cart-wheel" style="background-color: #D34011;"></div>
+                                    </div>
+                                    <span id="nbrP" class="panierHeader">{{ npanier }}</span>
+                                </a>
+                            </div>
+                            <div class="col-md-6 accountHeader">
+                                <a href="/auth/">
+                                    <div style="margin-bottom: -15px;"><i aria-hidden="true" class="fa fa-user"></i></div>
+                                    Mon compte
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto" >
+                    
+                    <li class="nav-item">
+                        <div id="panAccMob" style="display: none;padding: 20px;background: #fff !important;">
+                            <div class="row">
+                                <div class="col-6">
+                                    <a class="nav-link dropdown" href="/panier/">Mon panier ({{ npanier }})</a>
+                                </div>
+                                <div class="col-6" style="border-left : 1px solid #eee;">
+                                    <a class="nav-link dropdown" href="/auth/">Mon compte</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link dropdown" href="/produit/CANNES/8/">	
+                            CANNES
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link dropdown" href="/produit/MOULINETS/9/">MOULINETS
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link dropdown" href="/produit/FILS/10/">FILS
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link dropdown" href="/produit/HAMEÇONS/11/">HAMEÇONS
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link dropdown" href="/produit/ACCESSOIRES/12/">ACCESSOIRES
+                        </a>
+                    </li>
+                    <li class="nav-item" style="white-space: nowrap;">
+                        <a class="nav-link dropdown" href="/produit/LEURRES-JIGS/13/">LEURRES-JIGS
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link dropdown" href="/produit/BAGAGERIE/14/">BAGAGERIE
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link dropdown" href="/marques/">MARQUES
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% block body %}
+
+{% endblock body %}
+
+<!-- Featred Ends Here -->
+<!-- Subscribe Form Starts Here -->
+
+    <div class="subscribe-form">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="section-heading">
+                        <div class="line-dec"></div>
+                        <h1>Abonnez-vous à notre NewsLetter !</h1>
+                    </div>
+                </div>
+                <div class="col-md-8 offset-md-2">
+                    <div class="main-content">
+                        <p></p>
+                        <div class="container">
+                            <form id="newsletter" method="post" action="/newsletter/">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <fieldset>
+                                            <input name="emailnewletter" type="text" class="form-control" id="newsletterInput"
+                                                   onfocus="if(this.value == 'Entrer votre email ici ...') { this.value = ''; }"
+                                                   onBlur="if(this.value == '') { this.value = 'Entrer votre email ici ...';}"
+                                                   value="Entrer votre email ici ..." required="">
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <fieldset>
+                                            <button id="btnNewsletter" type="submit" id="form-submit" class="button">Rejoignez-nous!</button>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <br><br>
+                                <div id="msg_emaile_div"></div>
+                                <p id="msg_emaile"></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Subscribe Form Ends Here -->
+
+<!-- Footer Starts Here -->
+<div class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="logo">
+                    <img src="{{ asset('Bundle/assets/images/logo1.png') }}" alt="" style="height: 100px;">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="footer-menu">
+                    <ul>
+                        <li><a href="/index/">ACCEUIL</a></li>
+                        <li><a href="/a-propos/">A propos</a></li>
+                        <li><a href="/contact/">NOUS CONTACTER</a></li>
+                        <li><a href="/cgv/">CONDITIONS GÉNÉRALES DE VENTE</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="social-icons">
+                    <ul>
+                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="#"><i class="fa fa-rss"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Footer Ends Here -->
+
+
+<!-- Sub Footer Starts Here -->
+<div class="sub-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="copyright-text">
+                    <p>Copyright &copy; 2020 Tous droits reservés
+                    <a rel="nofollow" href="http://www.proxisoft.ma/">PROXISOFT</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Sub Footer Ends Here -->
+
+<!-- Bootstrap core JavaScript -->
+<script src="{{ asset('Bundle/vendor/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('Bundle/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+
+<!-- Additional Scripts -->
+<script src="{{ asset('Bundle/assets/js/custom.js') }}"></script>
+<script src="{{ asset("Bundle/assets/js/isotope.js") }}"></script>
+
+<script src="{{ asset('Bundle/assets/js/owl.js') }}"></script>
+<script type="text/javascript" src="{{ asset('/Bundle/ST/js/noty/packaged/jquery.noty.packaged.min.js') }}"></script>
+    <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+{% block js %}{% endblock js %}
+<script type="text/javascript">
+    $(function(){
+        $("#newsletter").submit(function(event){
+            var email      = $("#newsletterInput").val();
+            var msg_alert  = "Veuillez entrer votre email";
+
+            if (email  == "") {
+                $("#msg_emaile").html(msg_alert);
+                $("#msg_emaile_div").html("")
+
+
+            } else {
+
+                $.ajax({
+                    type : "POST",
+                    url: $(this).attr("action"),
+                    data: $(this).serialize(),
+
+                    success : function(data) {
+                        if (data.response == "OK") {
+
+                            $("#msg_emaile_div").html("<p style='color:white'> Votre adresse mail à été bien enregistrée !</p>")
+                            $("#msg_emaile").html("");
+
+                            document.getElementById("btnNewsletter").disabled = true;
+
+                        } else if(data.response == "invalide"){
+                            $("#msg_emaile_div").html("<p style='color:red'>  Veuillez saisir un email valide ex: example@example.com !</p>");
+                            $("#msg_emaile").html("");
+
+
+                        }
+
+                    },
+                    error: function() {
+                        $("#msg_emaile").html("<center><p style='font-size:19px;font-weight:bold;color:red;'>Votre abonnement à echoué, Veuillez ressayer plutard :(</p></center>");
+                        $("#msg_emaile_div").html("");
+
+                    }
+                   //---------
+                });
+            }
+
+            return false;
+        });
+    });
+    /*function deleteFromPanier(id,idColor){
+
+        $.ajax({
+            type: 'get',
+            url: '/deleteFromPanier/?id='+id+'&idColor='+idColor,
+            success: function(data){
+                if(data.response=="OK"){
+                    // var nbr = parseInt(document.getElementById("nbrP").innerHTML) - 1;
+                    //document.getElementById("nbrP").innerHTML = nbr;
+                    messagePanier("Le produit a bien été supprimé du panier");
+                    setTimeout(function(){ window.location.reload() ;} , 1000);                }
+            }
+        });
+    }*/
+
+
+    function setLocation(location){
+
+        window.location.href=location;
+    }
+
+
+
+
+    function deleteFromPanier(id,idColor,titleTaille,valeur){
+
+        $.ajax({
+            type: 'get',
+            url: '/deleteFromPanier/?id='+id+'&idColor='+idColor+'&taille='+titleTaille+'&valeur='+valeur,
+            success: function(data){
+                if(data.response=="OK"){
+                    // var nbr = parseInt(document.getElementById("nbrP").innerHTML) - 1;
+                    //document.getElementById("nbrP").innerHTML = nbr;
+                    messagePanier("Le produit a bien été supprimé du panier");
+                    setTimeout(function(){ window.location = "/panier/" ;} , 1000);                }
+            }
+        });
+    }
+
+    function messagePanier(message) {
+        noty({
+            text: message,
+            type: 'success',
+            theme: 'relax',
+            layout: 'bottom',
+            timeout: 3000,
+            animation: {
+                open: 'animated flipInX',
+                close: 'animated flipOutX', // jQuery animate function property object
+                easing: 'swing', // easing
+                speed: 200 // opening & closing animation speed
+            }
+
+        });
+    }
+    function errorContact(message) {
+        noty({
+            text: message,
+            type: 'error',
+            theme: 'defaultTheme',
+            layout: 'botoom',
+            timeout: 3000,
+            animation: {
+                open: 'animated flipInX',
+                close: 'animated flipOutX', // jQuery animate function property object
+                easing: 'swing', // easing
+                speed: 200 // opening & closing animation speed
+            }
+
+        });
+    }
+
+
+
+    //-----resp
+    $(document).ready(function(){
+        $('.idSpan').click(function(){
+
+            $(this).hide('fast');
+
+            $('#formsearch-mobile').show('fast');
+
+        });
+
+        //--------
+
+        var width = $(window).width();
+        if(width <= 991){
+            $("#blockSearch").css("display","none");
+            $("#blockAccount").css("display","none");
+            $("#blockLogo").addClass('col-12').removeClass('col-md-3');
+            //$("#blockAccount").addClass('col-md-6').removeClass('col-md-3');
+            $("#panAccMob").css("display","block");
+        }
+        else{
+            $("#blockSearch").css("display","inline-block");
+            $("#blockAccount").css("display","inline-block");
+            $("#blockLogo").addClass('col-md-3').removeClass('col-12');
+            $("#panAccMob").css("display","none");
+        }
+
+        var open = false;
+
+        $(".Mclick").click(function () {
+            if(!open) $('.Menu').animate({ left: '0px'}, 500);
+            else $('.Menu').animate({ left: '-100%'}, 500);
+            open = !open ? true : false;
+        });
+
+        $('.dwonLink').click(function(e){
+            $(this).children('.ultest').show();
+
+        });
+        $('.dwonLink2').click(function(){
+            $(this).children('.ultest2').toggle();
+
+        });
+
+        $('.filterp').click(function(){
+            $(this).parent('.cd-filter-by').children('ul').slideToggle();
+
+        });
+
+        $('.liClick').hover(function(){
+
+            var idParr = $(this).attr('id').split("-");
+            $('#'+idParr[0]+' .liClick').removeClass('navactive');
+            $(this).addClass("navactive");
+            $("#container-"+idParr[0]+" .hidden[show-hide="+$(this).attr('id')+"]").show();
+            $("#container-"+idParr[0]+" .hidden[show-hide!="+$(this).attr('id')+"]").hide();
+            $("#container-"+idParr[0]+" .hidden[show-hide!="+$(this).attr('id')+"]").removeClass( "nothidden" );
+        });
+    });
+
+    $(window).on('resize', function(){
+        var width = $(this).width();
+        if(width <= 991){
+            $("#blockSearch").css("display","none");
+            $("#blockAccount").css("display","none");
+            $("#blockLogo").addClass('col-12').removeClass('col-md-3');
+            //$("#blockAccount").addClass('col-md-6').removeClass('col-md-3');
+            $("#panAccMob").css("display","block");
+        }
+        else{
+            $("#blockSearch").css("display","inline-block");
+            $("#blockAccount").css("display","inline-block");
+            $("#blockLogo").addClass('col-md-3').removeClass('col-12');
+            $("#panAccMob").css("display","none");
+        }
+    });
+
+    /*----------- menu ------*/
+
+    function show(i){
+        //alert(i);
+        $("#dwonLink-"+i).parent().find( "li").toggle();
+        $("#dwonLink-"+i).parent().find( "ul").toggle();
+    }
+
+
+    function goToMarque(){
+        window.location.href="/marques/";
+    }
+    function goToVideo(){
+        window.location.href="/videos/";
+    }
+
+    function goToUrl(url){
+        window.location.href= url;
+    }
+
+</script>
+
+</body>
+
+</html>

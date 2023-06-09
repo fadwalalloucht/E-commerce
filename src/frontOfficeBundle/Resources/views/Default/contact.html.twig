@@ -1,0 +1,128 @@
+{% extends "@frontOffice/base1.html.twig" %}
+{% block title %}
+    CONTACT
+{% endblock title %}
+{% block body %}
+    <div class="hero-wrap hero-bread" style="background-image: url({{ asset('Bundle/assets/images/33.jpg') }});">
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-9 ftco-animate text-center">
+                    <h1 class="mb-0 bread">Nous contacter</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="ftco-section contact-section bg-light">
+        <div class="container">
+            <div class="row d-flex mb-5 contact-info">
+                <div class="w-100"></div>
+                <div class="col-md-3 d-flex">
+                    <div class="info bg-white p-4">
+                        <p><span>Address:</span> text text text text ...</p>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex">
+                    <div class="info bg-white p-4">
+                        <p><span>Tél:</span> +212 6 61 78 67 98 <br/> +212 6 61 78 67 98</p>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex">
+                    <div class="info bg-white p-4">
+                        <p><span>Email:</span> <a href="mailto:info@yoursite.com">mail@gmail.com</a></p>
+                    </div>
+                </div>
+                <div class="col-md-3 d-flex">
+                    <div class="info bg-white p-4">
+                        <p><span>Site web:</span> <a href="#">eloufirdesign.com</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row block-9">
+                <div class="col-md-12 order-md-last d-flex">
+                    <form method="post" class="bg-white p-5 contact-form">
+                        {% if response != "" %}
+                            {% if response == "succes" %}
+                                <div class="alert alert-success" role="alert">
+                                    Votre message a bien été envoyé !
+                                </div>
+                            {% else %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{response}}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Votre Nom*" name="nom">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Votre Email*" name="email">
+                        </div>
+                        <div class="form-group">
+                            <textarea name="text" id="" cols="30" rows="7" class="form-control" placeholder="Votre Message *"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Envoyer message" class="btn btn-primary py-3 px-5">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ftco-gallery">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 heading-section text-center mb-4 ftco-animate">
+                    <h2 class="mb-4">Suivez-nous sur les réseaux sociaux</h2>
+                    <p>Paragraphe text</p>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-0">
+            <div class="row no-gutters">
+                <div class="col-md-4 col-lg-2 ftco-animate">
+                    <a href="{{ asset('Bundle/assets/images/3.png') }}" class="gallery image-popup img d-flex align-items-center" style="background-image: url({{ asset('Bundle/assets/images/3.png') }});">
+                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                            <span class="icon-instagram"></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 col-lg-2 ftco-animate">
+                    <a href="{{ asset('Bundle/assets/images/4.png') }}" class="gallery image-popup img d-flex align-items-center" style="background-image: url({{ asset('Bundle/assets/images/4.png') }});">
+                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                            <span class="icon-instagram"></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 col-lg-2 ftco-animate">
+                    <a href="{{ asset('Bundle/assets/images/5.png') }}" class="gallery image-popup img d-flex align-items-center" style="background-image: url({{ asset('Bundle/assets/images/5.png') }});">
+                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                            <span class="icon-instagram"></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 col-lg-2 ftco-animate">
+                    <a href="{{ asset('Bundle/assets/images/2.png') }}" class="gallery image-popup img d-flex align-items-center" style="background-image: url({{ asset('Bundle/assets/images/2.png') }});">
+                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                            <span class="icon-instagram"></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 col-lg-2 ftco-animate">
+                    <a href="{{ asset('Bundle/assets/images/3.png') }}" class="gallery image-popup img d-flex align-items-center" style="background-image: url({{ asset('Bundle/assets/images/3.png') }});">
+                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                            <span class="icon-instagram"></span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 col-lg-2 ftco-animate">
+                    <a href="{{ asset('Bundle/assets/images/5.png') }}" class="gallery image-popup img d-flex align-items-center" style="background-image: url({{ asset('Bundle/assets/images/5.png') }});">
+                        <div class="icon mb-4 d-flex align-items-center justify-content-center">
+                            <span class="icon-instagram"></span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock body %}

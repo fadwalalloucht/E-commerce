@@ -1,0 +1,505 @@
+<?php
+
+namespace backOfficeBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * produitsite
+ *
+ * @ORM\Table(name="produitsite")
+ * @ORM\Entity(repositoryClass="backOfficeBundle\Repository\produitsiteRepository")
+ */
+class produitsite
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="Longeur", type="float",nullable=true)
+     */
+    private $Longeur;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="Largeur", type="float",nullable=true)
+     */
+    private $Largeur;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="Hauteur", type="float",nullable=true)
+     */
+    private $Hauteur;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="Poids", type="float",nullable=true)
+     */
+    private $Poids;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="Puissance", type="float",nullable=true)
+     */
+    private $Puissance;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateAjout", type="date")
+     */
+    private $dateAjout;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="titre", type="string", length=255)
+     */
+    private $titre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text")
+     */
+    private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ref", type="string", length=255)
+     */
+    private $ref;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="prix", type="float",nullable=true)
+     */
+    private $prix;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="newPrix", type="float",nullable=true)
+     */
+    private $newPrix;
+
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="idCategorie", type="integer")
+     */
+    private $idCategorie;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="video", type="string", length=255)
+     */
+    private $video;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="disp", type="integer")
+     */
+    private $disp;
+
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="libelle", type="string", length=255)
+     */
+    private $libelle;
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set dateAjout
+     *
+     * @param \DateTime $dateAjout
+     *
+     * @return produitsite
+     */
+    public function setDateAjout($dateAjout)
+    {
+        $this->dateAjout = $dateAjout;
+
+        return $this;
+    }
+
+    /**
+     * Get dateAjout
+     *
+     * @return \DateTime
+     */
+    public function getDateAjout()
+    {
+        return $this->dateAjout;
+    }
+
+    /**
+     * Set titre
+     *
+     * @param string $titre
+     *
+     * @return produitsite
+     */
+    public function setTitre($titre)
+    {
+        $this->titre = $titre;
+
+        return $this;
+    }
+
+    /**
+     * Get titre
+     *
+     * @return string
+     */
+    public function getTitre()
+    {
+        return $this->titre;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return produitsite
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set ref
+     *
+     * @param string $ref
+     *
+     * @return produitsite
+     */
+    public function setRef($ref)
+    {
+        $this->ref = $ref;
+
+        return $this;
+    }
+
+    /**
+     * Get ref
+     *
+     * @return string
+     */
+    public function getRef()
+    {
+        return $this->ref;
+    }
+
+    /**
+     * Set prix
+     *
+     * @param float $prix
+     *
+     * @return produitsite
+     */
+    public function setPrix($prix)
+    {
+        $this->prix = $prix;
+
+        return $this;
+    }
+
+    /**
+     * Get prix
+     *
+     * @return float
+     */
+    public function getPrix()
+    {
+        return $this->prix;
+    }
+
+    /**
+     * Set newPrix
+     *
+     * @param float $newPrix
+     *
+     * @return produitsite
+     */
+    public function setNewPrix($newPrix)
+    {
+        $this->newPrix = $newPrix;
+
+        return $this;
+    }
+
+    /**
+     * Get newPrix
+     *
+     * @return float
+     */
+    public function getNewPrix()
+    {
+        return $this->newPrix;
+    }
+
+    /**
+     * Set idCategorie
+     *
+     * @param integer $idCategorie
+     *
+     * @return produitsite
+     */
+    public function setIdCategorie($idCategorie)
+    {
+        $this->idCategorie = $idCategorie;
+
+        return $this;
+    }
+
+    /**
+     * Get idCategorie
+     *
+     * @return int
+     */
+    public function getIdCategorie()
+    {
+        return $this->idCategorie;
+    }
+
+    /**
+     * Set video
+     *
+     * @param string $video
+     *
+     * @return produitsite
+     */
+    public function setVideo($video)
+    {
+        $this->video = $video;
+
+        return $this;
+    }
+
+    /**
+     * Get video
+     *
+     * @return string
+     */
+    public function getVideo()
+    {
+        return $this->video;
+    }
+
+    /**
+     * Set disp
+     *
+     * @param integer $disp
+     *
+     * @return produitsite
+     */
+    public function setDisp($disp)
+    {
+        $this->disp = $disp;
+
+        return $this;
+    }
+
+    /**
+     * Get disp
+     *
+     * @return int
+     */
+    public function getDisp()
+    {
+        return $this->disp;
+    }
+
+
+
+
+    /**
+     * Set libelle
+     *
+     * @param string $libelle
+     *
+     * @return produitsite
+     */
+    public function setLibelle($libelle)
+    {
+        $this->libelle = $libelle;
+
+        return $this;
+    }
+
+    /**
+     * Get libelle
+     *
+     * @return string
+     */
+    public function getLibelle()
+    {
+        return $this->libelle;
+    }
+
+    /**
+     * Set longeur
+     *
+     * @param float $longeur
+     *
+     * @return produitsite
+     */
+    public function setLongeur($longeur)
+    {
+        $this->Longeur = $longeur;
+
+        return $this;
+    }
+
+    /**
+     * Get longeur
+     *
+     * @return float
+     */
+    public function getLongeur()
+    {
+        return $this->Longeur;
+    }
+
+    /**
+     * Set largeur
+     *
+     * @param float $largeur
+     *
+     * @return produitsite
+     */
+    public function setLargeur($largeur)
+    {
+        $this->Largeur = $largeur;
+
+        return $this;
+    }
+
+    /**
+     * Get largeur
+     *
+     * @return float
+     */
+    public function getLargeur()
+    {
+        return $this->Largeur;
+    }
+
+    /**
+     * Set hauteur
+     *
+     * @param float $hauteur
+     *
+     * @return produitsite
+     */
+    public function setHauteur($hauteur)
+    {
+        $this->Hauteur = $hauteur;
+
+        return $this;
+    }
+
+    /**
+     * Get hauteur
+     *
+     * @return float
+     */
+    public function getHauteur()
+    {
+        return $this->Hauteur;
+    }
+
+    /**
+     * Set poids
+     *
+     * @param float $poids
+     *
+     * @return produitsite
+     */
+    public function setPoids($poids)
+    {
+        $this->Poids = $poids;
+
+        return $this;
+    }
+
+    /**
+     * Get poids
+     *
+     * @return float
+     */
+    public function getPoids()
+    {
+        return $this->Poids;
+    }
+
+    /**
+     * Set puissance
+     *
+     * @param float $puissance
+     *
+     * @return produitsite
+     */
+    public function setPuissance($puissance)
+    {
+        $this->Puissance = $puissance;
+
+        return $this;
+    }
+
+    /**
+     * Get puissance
+     *
+     * @return float
+     */
+    public function getPuissance()
+    {
+        return $this->Puissance;
+    }
+}

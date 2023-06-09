@@ -1,0 +1,328 @@
+{% extends "@backOffice/base.html.twig" %}
+{% block title %}
+    NOUVEAU PRODUIT STOCK
+{% endblock title %}
+{% block style %}
+
+{% endblock style %}
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>PRODUIT STOCK</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/index1/">Acceuil</a></li>
+                            <li class="breadcrumb-item active">PRODUIT STOCK</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Nouveau PRODUIT STOCK</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <!-- form start -->
+                                <form role="form" id="FormAdd"  enctype="multipart/form-data">
+
+                                    <div class="form-group">
+                                        <label>Categorie :</label>
+                                        <select  class="form-control" name="categorie" id="categorie" onchange="getSousCategories()">
+                                            <option value="--">----------</option>
+                                            {% for c in categorie %}
+                                                <option value="{{ c.id }}">{{ c.nom }}</option>
+                                            {% endfor %}
+
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Sous Categorie :</label>
+                                        <div id="sousC">
+                                            <select class="form-control" id="cat"  name="souscategorie" >
+                                                <option value="--">----------</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Titre :</label>
+                                        <input type="text" class="form-control" name="titre" id="titre">
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span> <label>	Prix HT :</label>
+                                        <input type="number" min="0" class="form-control" name="ht" id="ht" onkeyup="calcultt()">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span> <label>	% TVA :</label>
+                                        <input type="number" min="0" class="form-control" name="tva" id="tva" onkeyup="calcultt()">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>	Prix TTC :</label>
+                                        <input type="number"  min="0" class="form-control" name="ttc" id="ttc" readonly >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span>  <label>Quantite :</label>
+                                        <input type="number" min="0" class="form-control" name="qnt" id="qte">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span style="color: red" >*</span> <label>Description :</label>
+                                        <textarea class="form-control cleditor" rows="3" name="description" id="desc"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Ajouter dans le site :</label>
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" onchange="addToSite()" name="addSite" id="addSite" value="1"> Oui
+                                        </label>
+                                    </div>
+
+                                    <div class="form-group input-group" id="prixSite" style="display: none;">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Prix du site</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="prixSite" value="0" id="prixSiteVal">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">MAD</span>
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <div class="form-group">
+
+                                    </div>
+                                    <div style="text-align: center;">
+
+                                    </div>
+                                    <br>
+
+                                    <div class="card-body">
+                                        <table id="tableEngins" class="table table-bordered table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Produits De Matière Première </th>
+                                                <th>Quantité</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for p in produits if p["produit"].Rest>0 %}
+                                                <tr>
+                                                    <td><input name="prdDetail[]" type="checkbox" value="{{p["produitmp"].id}}"></td>
+                                                    <td><input name="idDetail[]" type="hidden" value="{{p["produit"].id}}" >{{p["produitmp"].titre}}</td>
+                                                    <td><input name="qteDetail[]" type="number" value="{{p["produit"].Rest}}" max="{{p["produit"].Rest}}" min="1"></td>
+                                                </tr>
+
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label>Pièce de joint :</label>
+                                        <input type="file" name="fichier" id="file">
+                                    </div>
+
+
+                                    <div style="text-align: center;">
+                                        <button type="submit" class="btn btn-success" id="submit" >Enregistrer</button>
+                                        <button type="reset" class="btn btn-danger">Annuler</button>
+                                    </div>
+                                </form>
+                                <!-- form end -->
+                                <div id="response" style="margin-top: 10px;">
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </section>
+    </div>
+
+
+{% endblock body %}
+
+{% block js %}
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/jquery.popupoverlay.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/Bundle/ST/js/noty/packaged/jquery.noty.packaged.min.js') }}"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#desc").cleditor()[0].focus();
+
+        });
+
+
+        function addToSite(){
+            $("#prixSite").toggle();
+        }
+
+        function calculPrix(){
+            var ht = parseFloat(document.getElementById("ht").value.replace(",","."));
+            var tva = document.getElementById("tva").value.replace(",",".");
+            if(tva != "" && ht != ""){
+                var pttc = parseFloat(ht+(ht*(tva/100)));
+                document.getElementById("ttc").value = pttc;
+            }
+        }
+
+        $("#FormAdd").on('submit', function(e){
+            e.preventDefault();
+            var selectBox = document.getElementById("cat");
+            var sc = selectBox.options[selectBox.selectedIndex].value;
+            // AJAX Code To Submit Form.
+            $.ajax({
+                type: "POST",
+                url: "/add-stock/?sc="+sc,
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData:false,
+                success: function(data){
+                    var resp = data.response.split("-");
+                    if(resp[0] != "OK"){
+                        var response = '<div class="alert alert-danger alert-dismissable">'
+                            + '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'
+                            + data.response
+                            + '</div>';
+                        document.getElementById("response").innerHTML = response;
+
+                    }
+                    else{
+                        if(resp[1] != 0){
+                            window.location.reload();
+                        }
+                        $("#FormAdd")[0].reset();
+                        var response = '<div class="alert alert-success alert-dismissable">'
+                            + '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'
+                            + 'Produit ajouté avec succès'
+                            + '</div>';
+                        document.getElementById("response").innerHTML = response;
+                        window.location.reload();
+                    }
+                }
+            });
+            return false;
+        });
+
+
+
+        function getSousCategories(){
+            var selectBox = document.getElementById("categorie");
+            var id = selectBox.options[selectBox.selectedIndex].value;
+            if(id != "--"){
+                var url = "/getsouscategorie/?id="+id;
+                $.ajax({
+                    type: 'get',
+                    url: url,
+                    success: function(data){
+                        if(data.response!=null){
+                            var element = document.getElementById("sousC");
+                            var sous = '<select  class="form-control" id="cat" name="souscategorie" ><option value="--">----------</option>';
+                            for(var i=0;i<data.response.length;i++){
+                                sous = sous+'<option value='+data.response[i]["id"]+'>'+data.response[i]["nom"]+'</option>';
+                            }
+                            sous = sous+'</select>';
+                            element.innerHTML = sous;
+
+                        }
+                        else{
+                            errorupload("Une erreur s'est produite");
+
+                        }
+
+
+                    }
+                });
+            }
+        }
+        function calcultt(){
+            //alert("ghfhfhg");
+            // var HT
+            var ht = Number(document.getElementById("ht").value);
+            // var Ttc
+            var ttc = Number(document.getElementById("ttc").value);
+            // var tva
+            var tva = Number(document.getElementById("tva").value);
+
+            console.log(ht,tva);
+            //calculer la valeur de ttc
+
+            ttc=(ht+(ht*(tva/100)));
+
+            document.getElementById("ttc").value = Math.round(ttc * 100) / 100 ;
+        }
+
+
+
+        function addEngin()
+        {
+            var produitmp=document.getElementById("pmp").value;
+            var qnt=document.getElementById("qnt").value;
+            var mp=$( "#pmp option:selected" ).text();
+            if(produitmp=="" || qnt=="")
+            {
+                noty({
+                    text: "pouvez vous remplir les champs s'il vous plait!",
+                    type: "error",
+                    theme: 'relax',
+                    layout: 'bottom',
+                    timeout: 3000,
+                    animation: {
+                        open: 'animated flipInX',
+                        close: 'animated flipOutX', // jQuery animate function property object
+                        easing: 'swing', // easing
+                        speed: 200 // opening & closing animation speed
+                    }
+
+                });
+
+            }
+            else
+            {
+                var table=document.getElementById('tableEngins').getElementsByTagName('tbody')[0];
+
+                var newRow= table.insertRow(table.rows.length);
+
+                var newCellProduitMP=newRow.insertCell(0);
+                var newCellQuantité=newRow.insertCell(1);
+
+                var newCode=mp+"<input type='hidden' value='"+produitmp+"' name='idmp[]'/>";
+                var newFamille=qnt+"<input type='hidden' value='"+qnt+"' name='qte[]'/>";
+
+                newCellProduitMP.innerHTML+=newCode;
+                newCellQuantité.innerHTML+=newFamille;
+
+            }
+        }
+    </script>
+
+{% endblock js %}

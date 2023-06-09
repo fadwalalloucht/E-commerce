@@ -1,0 +1,344 @@
+<?php
+
+namespace backOfficeBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * panier
+ *
+ * @ORM\Table(name="panier")
+ * @ORM\Entity(repositoryClass="backOfficeBundle\Repository\panierRepository")
+ */
+class panier
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="idCommande", type="integer")
+     */
+    private $idCommande;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title_taille", type="string", length=255, nullable=true)
+     */
+    private $titleTaille;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="valeur_taille", type="string", length=255, nullable=true)
+     */
+    private $valeurTaille;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="prix", type="float",nullable=true)
+     */
+    private $prix;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="idProduitsite", type="integer")
+     */
+    private $idProduitsite;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="quantite", type="integer")
+     */
+    private $quantite;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="color", type="string", length=255)
+     */
+    private $color;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="code", type="string", length=255)
+     */
+    private $code;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="idColor", type="integer")
+     */
+    private $idColor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="titre", type="text")
+     */
+    private $titre;
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set idCommande
+     *
+     * @param integer $idCommande
+     *
+     * @return panier
+     */
+    public function setIdCommande($idCommande)
+    {
+        $this->idCommande = $idCommande;
+
+        return $this;
+    }
+
+    /**
+     * Get idCommande
+     *
+     * @return int
+     */
+    public function getIdCommande()
+    {
+        return $this->idCommande;
+    }
+
+    /**
+     * Set idProduitsite
+     *
+     * @param integer $idProduitsite
+     *
+     * @return panier
+     */
+    public function setIdProduitsite($idProduitsite)
+    {
+        $this->idProduitsite = $idProduitsite;
+
+        return $this;
+    }
+
+    /**
+     * Get idProduitsite
+     *
+     * @return int
+     */
+    public function getIdProduitsite()
+    {
+        return $this->idProduitsite;
+    }
+
+    /**
+     * Set quantite
+     *
+     * @param integer $quantite
+     *
+     * @return panier
+     */
+    public function setQuantite($quantite)
+    {
+        $this->quantite = $quantite;
+
+        return $this;
+    }
+
+    /**
+     * Get quantite
+     *
+     * @return int
+     */
+    public function getQuantite()
+    {
+        return $this->quantite;
+    }
+
+    /**
+     * Set color
+     *
+     * @param string $color
+     *
+     * @return panier
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * Get color
+     *
+     * @return string
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     *
+     * @return panier
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * Set idColor
+     *
+     * @param integer $idColor
+     *
+     * @return panier
+     */
+    public function setIdColor($idColor)
+    {
+        $this->idColor = $idColor;
+
+        return $this;
+    }
+
+    /**
+     * Get idColor
+     *
+     * @return int
+     */
+    public function getIdColor()
+    {
+        return $this->idColor;
+    }
+
+    /**
+     * Set prix
+     *
+     * @param float $prix
+     *
+     * @return panier
+     */
+    public function setPrix($prix)
+    {
+        $this->prix = $prix;
+
+        return $this;
+    }
+
+    /**
+     * Get prix
+     *
+     * @return float
+     */
+    public function getPrix()
+    {
+        return $this->prix;
+    }
+
+    /**
+     * Set titleTaille
+     *
+     * @param string $titleTaille
+     *
+     * @return panier
+     */
+    public function setTitleTaille($titleTaille)
+    {
+        $this->titleTaille = $titleTaille;
+
+        return $this;
+    }
+
+    /**
+     * Get titleTaille
+     *
+     * @return string
+     */
+    public function getTitleTaille()
+    {
+        return $this->titleTaille;
+    }
+
+    /**
+     * Set valeurTaille
+     *
+     * @param string $valeurTaille
+     *
+     * @return panier
+     */
+    public function setValeurTaille($valeurTaille)
+    {
+        $this->valeurTaille = $valeurTaille;
+
+        return $this;
+    }
+
+    /**
+     * Get valeurTaille
+     *
+     * @return string
+     */
+    public function getValeurTaille()
+    {
+        return $this->valeurTaille;
+    }
+
+    /**
+     * Set titre
+     *
+     * @param string $titre
+     *
+     * @return panier
+     */
+    public function setTitre($titre)
+    {
+        $this->titre = $titre;
+
+        return $this;
+    }
+
+    /**
+     * Get titre
+     *
+     * @return string
+     */
+    public function getTitre()
+    {
+        return $this->titre;
+    }
+}

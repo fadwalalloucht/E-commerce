@@ -1,0 +1,316 @@
+{% extends "@frontOffice/base1.html.twig" %}
+{% block title %}
+    PANIER
+{% endblock title %}
+{% block body %}
+    <div class="hero-wrap hero-bread" style="background-image: url({{ asset('Bundle/assets/images/12.jpg') }});">
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center">
+                <div class="col-md-9 ftco-animate text-center">
+                    <h1 class="mb-0 bread">Mon panier</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="ftco-section ftco-cart">
+        <div class="container">
+            {% if article|length != 0 %}
+                <div class="row">
+                    <div class="col-md-12 ftco-animate">
+                        <div class="cart-list">
+
+                            <table class="table">
+                                <thead class="thead-primary">
+                                <tr class="text-center">
+                                    <th>&nbsp;</th>
+                                    <th>&nbsp;</th>
+                                    <th>Produit</th>
+                                    <th>Quantité</th>
+                                    <th>Prix unitaire</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for a in article %}
+                                    <tr class="text-center">
+                                        <td class="product-remove"><a href="#" onclick="deleteFromPanier({{ a['obj'].id  }},{{ a['idColor'] }},'{{ a['obj1'].titleTaille }}','{{ a['obj1'].valeurTaille }}')"><span class="ion-ios-close"></span></a></td>
+                                        <td class="image-prod"><a href="/produit_detail/{{ a['obj'].titre|replace({"/":"-"," ":"-" }) }}/{{ a['obj'].id }}" class="img" style="background-image:url({{ a['img'] }});"></a></td>
+                                        <td class="product-name">
+                                            <h3>{{ a['obj'].titre }}</h3>
+                                        </td>
+                                        <td class="quantity">
+                                            <div class="input-group mb-3">
+                                                <input name="quantity" class="quantity form-control input-number" type="number" step="1" id="quantite-{{ a['obj'].id }}-{{ a['idColor'] }}-{{ a['obj1'].titleTaille }}-{{ a['obj1'].valeurTaille }}" value="{{ a['qte'] }}" min="1" onkeyup="changeQuantite('{{ a['obj'].id }}','{{ a['idColor'] }}','{{ a['obj1'].titleTaille }}','{{ a['obj1'].valeurTaille }}',{{ a['obj1'].id }})" onchange="changeQuantite('{{ a['obj'].id }}','{{ a['idColor'] }}','{{ a['obj1'].titleTaille }}','{{ a['obj1'].valeurTaille }}',{{ a['obj1'].id }})">
+                                            </div>
+                                        </td>
+                                        <td class="total">{{ a['prix']  }} MAD</td>
+                                    </tr><!-- END TR-->
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div><br/><br/>
+                <div class="tfoot">
+                    <button type="button" title="Continuer les achats" class="btn btn-info py-3 px-4 text-white" onclick="setLocation('/index/')" style="color: white!important;">
+                        Continuer les achats
+                    </button>
+
+                    <button type="button" onclick="viderPanier();" name="update_cart_action" value="empty_cart" title="Vider le panier" class="btn btn-danger py-3 px-4 text-white" id="empty_cart_button" style="color: white!important;">
+                        Vider le panier
+                    </button>
+                </div>
+                <div class="row justify-content-start">
+                    <div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate" style="left: 60%;">
+                        <div class="cart-total mb-3">
+                            <h3>MONTANT TOTAL</h3>
+                            <p class="d-flex total-price">
+                                <span>TOTAL FINAL </span>
+                                <span id="total">{{ total }}</span> MAD
+                            </p>
+                        </div>
+                        <p class="text-center"><a id="myBtn" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-primary py-3 px-4">Passer la commande</a></p>
+                    </div>
+                </div>
+            {% else %}
+                <center>
+                    <div class="tfoot">
+                        <button type="button"  onclick="setLocation('/index/')" name="update_cart_action" value="empty_cart"  class="btn btn-primary py-3 px-4" id="empty_cart_button">
+                            <span>Votre panier est vide Veuillez cliquer ici pour faire vos achats </span>
+                        </button>
+                    </div>
+                </center>
+            {% endif %}
+
+        </div>
+    </section>
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Résumé de la commande</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% if membre != null %}
+                    <div class="modal-body">
+                        <form>
+                            <div class="card" style="padding: 10px;">
+                                <div class="row">
+                                    <div class="col-4"><b>Nom & Prénom : </b></div>
+                                    <div class="col-8">
+                                        {% if membre != null %}{{ membre.nom }} {{ membre.prenom }}{% endif %}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4"><b>Email : </b></div>
+                                    <div class="col-8">
+                                        {% if membre != null %}{{ membre.email }}{% endif %}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4"><b>Téléphone : </b></div>
+                                    <div class="col-8">{% if membre != null %}{{ membre.mobile }}{% endif %}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4"><b>Adresse : </b></div>
+                                    <div class="col-8">{% if membre != null %}{{ membre.adresse }}{% endif %}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 pull-right">
+                                        <a href="/mon-profil/" class="">Modifier mes informations</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row table-responsive">
+                                <table id="shopping-cart-table" class="table table-hover">
+
+                                    <thead>
+                                    <tr>
+                                        <th rowspan="1" ></th>
+                                        <th rowspan="1">
+                                            <span class="nobr">Nom du produit</span>
+                                        </th>
+                                        <th class="a-center" colspan="1">
+                                            <span class="nobr">Taille</span>
+                                        </th>
+                                        <th class="a-center" colspan="1">
+                                            <span class="nobr">Prix unitaire</span>
+                                        </th>
+                                        <th rowspan="1" class="a-center">
+                                            Qté
+                                        </th>
+                                        <th rowspan="1" class="a-center">
+                                            Couleur
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for a in article %}
+                                        <tr>
+                                            <td>
+                                                <a href="/produit_detail/{{ a['obj'].titre|replace({"/":"-"," ":"-" }) }}/{{ a['obj'].id }}" class="product-image"><img src="{{ a['img'] }}" width="75" height="75" alt="{{ a['obj'].titre }}" /></a>
+                                            </td>
+                                            <td>
+                                                <p>
+                                                    <a href="/produit_detail/{{ a['obj'].titre|replace({"/":"-"," ":"-" }) }}/{{ a['obj'].id }}">{{ a['obj'].titre }}</a>
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <span class="cart-price" style="color:black;"><span class="price">{{ a['obj1'].titleTaille }} {{ a['obj1'].valeurTaille }}</span></span>
+                                            </td>
+                                            <td>
+                                                <span class="cart-price" style="color:red;"><span class="price">{{ a['prix']  }} MAD</span></span>
+                                            </td>
+                                            <td class="a-center" id="qtt">
+                                                {{ a['qte'] }}
+                                            </td>
+                                            <td>
+                                                <center>
+                                                    <span style="width: 25px;height: 25px;border-radius: 50%;background: {{ a["color"] }};display: block;"></span>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div><br/>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="price-content">
+                                        <div class="content-price-two">
+                                            <h4>TOTAL FINAL :&nbsp;<span id="total1">{{ total }} MAD</span></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                        <button type="button" id="myBtn1" onClick="commander()" class="btn btn-primary">Commander</button>
+                    </div>
+                {% else %}
+                    <div class="badge badge-danger alert" style="width: 100%;line-height: 1.5;">Veuillez vous connecter avant de valider votre commande <br><a href='/auth/'>Cliquez ici</a></div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endblock body %}
+{% block js %}
+    <script type="text/javascript">
+        function myFunction() {
+            document.getElementById("myBtn").disabled = true;
+        }
+
+        function changeQuantite(id,idColor,titleTaille,valeur,idf){
+
+
+            var quantite = document.getElementById("quantite-"+id+"-"+idColor+"-"+titleTaille+"-"+valeur).value;
+
+            $.ajax({
+                type: 'get',
+                url: '/changeQuantite/?id='+idf+'&quantite='+quantite,
+                success: function(data){
+                    if(data.response =="!NO"){
+
+                        document.getElementById("total").innerHTML = '<img src="/Bundle/ST/images/808.gif" width="60px">';
+                        $.ajax({
+                            type: 'get',
+                            url: '/addquantite/?idArticle='+id+'&quantite='+quantite+'&idColor='+idColor+'&taille='+titleTaille+'&valeur='+valeur,
+                            success: function(data){
+                                if(data.response !="NO"){
+                                    var m = data.response ;
+                                    document.getElementById("total").innerHTML = m.toFixed(2);
+                                    document.getElementById("total1").innerHTML = m.toFixed(2);
+                                    document.getElementById("qtt").innerHTML = quantite;
+                                }
+                                else{
+                                    errorCommande("La quantité ne peut pas etre négative");
+                                    setTimeout(function(){ window.location.reload() ;} , 2000);
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        errorCommande("Stock disponible ("+data.response+")");
+                        document.getElementById("quantite-"+id+"-"+idColor+"-"+titleTaille+"-"+valeur).value= data.response;
+                    }
+                }
+            });
+        }
+
+        function viderPanier(){
+
+            $.ajax({
+                type: 'get',
+                url: '/viderPanier/',
+                success: function(data){
+                    if(data.response == "OK"){
+
+                        succesCommande("Vous avez vidé votre panier  ");
+                        setTimeout(function(){ window.location.reload() ;} , 1000);
+
+                    }
+
+                    else{
+                        errorCommande("Une erreur s'est produite");
+                    }
+                }
+            });
+        }
+
+        function commander(){
+
+            document.getElementById("myBtn").disabled = true;
+            $.ajax({
+                type: 'get',
+                url: '/commander/',
+                success: function(data){
+                    if(data.response == "OK"){
+
+                        succesCommande("Votre commande est effectué avec succès  ");
+                        setTimeout(function(){ window.location.href="/mes-commandes/" ;} , 1000);
+
+                    }
+                    else if(data.response == "NO1"){
+                        errorCommande("Veuillez vous connecter avant de valider votre commande <br><a href='/auth/'>Cliquez ici</a>");
+                    }
+                    else{
+                        errorCommande("Une erreur s'est produite");
+                    }
+                }
+            });
+        }
+
+        function errorCommande(message) {
+            noty({
+                text: message,
+                type: 'error',
+                theme: 'relax',
+                layout: 'bottomCenter',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+            });
+        }
+        function succesCommande(message) {
+            noty({
+                text: message,
+                type: 'success',
+                theme: 'relax',
+                layout: 'bottomCenter',
+                animation: {
+                    open: 'animated bounceInDown',
+                    close: 'animated bounceOutUp', // jQuery animate function property object
+                    easing: 'swing', // easing
+                    speed: 200 // opening & closing animation speed
+                }
+            });
+        }
+    </script>
+{% endblock js %}
